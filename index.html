@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#0a0806" />
+<title>Oğuz İgidləri — Xatirə Saytı</title>
+<meta name="description" content="Oğuz rayonunun II Qarabağ müharibəsi şəhidlərinin xatirəsinə həsr olunmuş sayt.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ==================== RESET & VARIABLES ==================== */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+
+:root{
+  --bg:#0a0806;
+  --bg-2:#12100c;
+  --qizili:#c9a227;
+  --qizili-acik:#e8c547;
+  --qizili-tund:#8a6d1a;
+  --qizili-glow:rgba(201,162,39,.35);
+  --qizili-soft:rgba(201,162,39,.12);
+  --metn:#f5f0e8;
+  --metn-2:#a89f8f;
+  --metn-3:#6b6357;
+  --glass-bg:rgba(201,162,39,.05);
+  --glass-bg-2:rgba(201,162,39,.09);
+  --glass-border:rgba(201,162,39,.15);
+  --glass-border-2:rgba(201,162,39,.28);
+  --radius:18px;
+  --radius-sm:12px;
+  --radius-lg:26px;
+  --transition:cubic-bezier(.4,0,.2,1);
+}
+
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--metn);
+  line-height:1.7;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  position:relative;
+}
+body.yuklenir{overflow:hidden;}
+
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+img{max-width:100%;display:block;}
+::selection{background:var(--qizili);color:var(--bg);}
+
+::-webkit-scrollbar{width:9px;}
+::-webkit-scrollbar-track{background:var(--bg-2);}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--qizili-tund),var(--qizili));border-radius:9px;border:2px solid var(--bg-2);}
+::-webkit-scrollbar-thumb:hover{background:var(--qizili-acik);}
+
+.konteyner{max-width:1280px;margin:0 auto;padding:0 24px;width:100%;}
+
+/* ==================== LOADER ==================== */
+#loader{
+  position:fixed;inset:0;z-index:9999;
+  background:radial-gradient(ellipse at center, #12100c, #0a0806);
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:36px;
+  transition:opacity .9s var(--transition), visibility .9s;
+}
+#loader.gizlən{opacity:0;visibility:hidden;pointer-events:none;}
+
+.loader-emblem{
+  width:90px;height:90px;position:relative;
+  animation:emblemDön 1.4s var(--transition) both;
+}
+.loader-emblem::before{
+  content:'';position:absolute;inset:0;
+  border:2px solid var(--qizili-tund);
+  border-radius:50%;
+  border-top-color:var(--qizili-acik);
+  animation:fırlan 1.6s linear infinite;
+}
+.loader-emblem::after{
+  content:'O';
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;
+  font-size:38px;font-weight:700;
+  color:var(--qizili-acik);
+  text-shadow:0 0 24px var(--qizili-glow);
+}
+@keyframes emblemDön{from{transform:scale(.6);opacity:0;}to{transform:scale(1);opacity:1;}}
+@keyframes fırlan{to{transform:rotate(360deg);}}
+
+.loader-metn{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:13px;font-weight:500;letter-spacing:8px;
+  text-transform:uppercase;color:var(--metn-2);
+  overflow:hidden;
+}
+.loader-metn span{display:inline-block;animation:hərfÇıx .5s var(--transition) both;}
+@keyframes hərfÇıx{from{transform:translateY(100%);opacity:0;}to{transform:translateY(0);opacity:1;}}
+
+.loader-bar{
+  width:180px;height:2px;background:rgba(201,162,39,.1);
+  border-radius:100px;overflow:hidden;position:relative;
+}
+.loader-bar::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,var(--qizili-tund),var(--qizili-acik));
+  border-radius:100px;
+  animation:barDol 2s var(--transition) forwards;
+  transform-origin:left;
+}
+@keyframes barDol{from{transform:scaleX(0);}to{transform:scaleX(1);}}
+
+/* ==================== ARXA FON ==================== */
+.bg-qat{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;}
+.bg-parıltı{position:absolute;border-radius:50%;filter:blur(120px);opacity:.18;will-change:transform;}
+.bg-parıltı-1{
+  width:700px;height:700px;
+  background:radial-gradient(circle,var(--qizili),transparent 70%);
+  top:-250px;right:-200px;
+  animation:parıltı1 28s ease-in-out infinite;
+}
+.bg-parıltı-2{
+  width:500px;height:500px;
+  background:radial-gradient(circle,var(--qizili-tund),transparent 70%);
+  bottom:-200px;left:-150px;
+  animation:parıltı2 34s ease-in-out infinite;
+  opacity:.12;
+}
+@keyframes parıltı1{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-100px,100px) scale(1.12);}}
+@keyframes parıltı2{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(120px,-80px) scale(1.08);}}
+
+body::before{
+  content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+  opacity:.02;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+#progress{
+  position:fixed;top:0;left:0;height:2px;z-index:1100;
+  background:linear-gradient(90deg,var(--qizili-tund),var(--qizili-acik));
+  width:0%;transition:width .1s linear;
+  box-shadow:0 0 14px var(--qizili-glow);
+}
+
+/* ==================== HEADER ==================== */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  padding:18px 0;
+  transition:all .4s var(--transition);
+}
+header.aktiv{
+  padding:12px 0;
+  background:rgba(10,8,6,.82);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border-bottom:1px solid var(--glass-border);
+}
+header.gizlət{transform:translateY(-110%);}
+
+.nav{display:flex;align-items:center;justify-content:space-between;gap:20px;}
+
+.logo{display:flex;align-items:center;gap:14px;transition:.3s var(--transition);}
+.logo:hover{transform:translateY(-1px);}
+
+.logo-işarə{width:44px;height:44px;position:relative;flex-shrink:0;transition:.4s var(--transition);}
+.logo:hover .logo-işarə{transform:scale(1.08);}
+
+.logo-işarə .halqa{
+  position:absolute;inset:0;
+  border:1.5px solid var(--qizili);
+  border-radius:50%;opacity:.6;
+  transition:.4s var(--transition);
+}
+.logo:hover .logo-işarə .halqa{opacity:1;border-color:var(--qizili-acik);}
+.logo-işarə .halqa-2{position:absolute;inset:6px;border:1px solid var(--qizili-tund);border-radius:50%;opacity:.4;}
+.logo-işarə .hərf{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;
+  font-size:24px;font-weight:700;
+  color:var(--qizili-acik);
+  text-shadow:0 0 16px var(--qizili-glow);
+}
+.logo-işarə .ulduz{
+  position:absolute;width:3px;height:3px;
+  background:var(--qizili-acik);border-radius:50%;
+  box-shadow:0 0 6px var(--qizili-glow);
+}
+.logo-işarə .ulduz:nth-child(4){top:-2px;left:50%;transform:translateX(-50%);}
+.logo-işarə .ulduz:nth-child(5){bottom:-2px;left:50%;transform:translateX(-50%);}
+.logo-işarə .ulduz:nth-child(6){top:50%;left:-2px;transform:translateY(-50%);}
+.logo-işarə .ulduz:nth-child(7){top:50%;right:-2px;transform:translateY(-50%);}
+
+.logo-metn{display:flex;flex-direction:column;line-height:1.15;}
+.logo-metn .əsas{
+  font-family:'Cormorant Garamond',serif;
+  font-size:19px;font-weight:700;
+  color:var(--metn);letter-spacing:.5px;
+}
+.logo-metn .alt{
+  font-size:9px;font-weight:500;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--qizili);opacity:.8;
+}
+
+.menu{
+  display:flex;gap:4px;align-items:center;
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  border-radius:100px;padding:5px;
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+}
+.menu a{
+  font-size:13.5px;font-weight:500;
+  color:var(--metn-2);
+  padding:9px 18px;border-radius:100px;
+  transition:.3s var(--transition);
+  white-space:nowrap;
+}
+.menu a:hover{color:var(--metn);background:var(--glass-bg-2);}
+
+.mobil-btn{
+  display:none;width:44px;height:44px;border-radius:12px;
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  align-items:center;justify-content:center;
+  flex-direction:column;gap:5px;
+}
+.mobil-btn span{width:20px;height:1.5px;background:var(--metn);border-radius:2px;transition:.3s var(--transition);}
+.mobil-btn.aktiv span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.mobil-btn.aktiv span:nth-child(2){opacity:0;}
+.mobil-btn.aktiv span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+
+/* ==================== HERO ==================== */
+.hero{
+  min-height:100vh;min-height:100dvh;
+  display:flex;align-items:center;
+  position:relative;padding:150px 0 80px;
+}
+.hero-ic{max-width:880px;margin:0 auto;text-align:center;}
+
+.hero-nisan{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:8px 20px;border-radius:100px;
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  font-size:12.5px;font-weight:500;
+  color:var(--metn-2);
+  margin-bottom:34px;
+}
+.hero-nisan .noqtə{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--qizili-acik);
+  box-shadow:0 0 10px var(--qizili-glow);
+  animation:pulse 2.4s infinite;
+}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.35);opacity:.55;}}
+
+.hero h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(40px,7.5vw,82px);
+  font-weight:700;line-height:1.05;letter-spacing:-1.5px;
+  margin-bottom:28px;
+}
+.hero h1 .sətir{display:block;overflow:hidden;}
+.hero h1 .sətir span{display:inline-block;animation:sətirÇıx 1s var(--transition) both;}
+.hero h1 .sətir:nth-child(1) span{animation-delay:2.4s;}
+.hero h1 .sətir:nth-child(2) span{animation-delay:2.55s;}
+.hero h1 .sətir:nth-child(3) span{animation-delay:2.7s;}
+@keyframes sətirÇıx{from{transform:translateY(110%);opacity:0;}to{transform:translateY(0);opacity:1;}}
+
+.qrad{
+  background:linear-gradient(135deg,var(--qizili-acik) 0%,var(--qizili) 50%,var(--qizili-tund) 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  position:relative;display:inline-block;
+}
+
+.hero p{
+  font-size:clamp(15px,1.8vw,17px);
+  color:var(--metn-2);
+  max-width:600px;margin:0 auto 42px;
+  line-height:1.75;
+  animation:fadeUp 1s var(--transition) 2.9s both;
+}
+
+.hero-btnler{
+  display:flex;gap:14px;justify-content:center;flex-wrap:wrap;
+  animation:fadeUp 1s var(--transition) 3.1s both;
+  margin-bottom:70px;
+}
+
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:15px 32px;border-radius:100px;
+  font-weight:600;font-size:15px;
+  transition:.35s var(--transition);
+  position:relative;overflow:hidden;
+  white-space:nowrap;
+}
+.btn-ana{
+  background:linear-gradient(135deg,var(--qizili-tund),var(--qizili-acik));
+  color:var(--bg);
+  box-shadow:0 10px 32px rgba(201,162,39,.3);
+}
+.btn-ana:hover{transform:translateY(-3px);box-shadow:0 16px 44px rgba(201,162,39,.5);}
+
+.btn-ikinci{
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border-2);
+  color:var(--metn);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+}
+.btn-ikinci:hover{background:var(--glass-bg-2);border-color:var(--qizili);transform:translateY(-3px);}
+
+/* ==================== STATİSTİKA ==================== */
+.stat-ler{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+  animation:fadeUp 1s var(--transition) 3.3s both;
+  max-width:860px;margin:0 auto;
+}
+.stat{
+  padding:26px 14px;border-radius:var(--radius);
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  text-align:center;transition:.4s var(--transition);
+}
+.stat:hover{
+  transform:translateY(-4px);
+  background:var(--glass-bg-2);
+  border-color:var(--glass-border-2);
+  box-shadow:0 20px 40px rgba(0,0,0,.5);
+}
+.stat .rəqəm{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(28px,4.5vw,42px);
+  font-weight:700;color:var(--qizili-acik);
+  line-height:1;margin-bottom:8px;
+}
+.stat .ad{
+  font-size:11px;color:var(--metn-3);
+  font-weight:600;letter-spacing:1.4px;
+  text-transform:uppercase;
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+
+/* ==================== BÖLMƏ ==================== */
+section{padding:110px 0;position:relative;}
+
+.bolme-basliq{
+  text-align:center;margin-bottom:60px;
+  max-width:680px;margin-left:auto;margin-right:auto;
+}
+.bolme-basliq .etiket{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:7px 16px;border-radius:100px;
+  background:var(--qizili-soft);
+  border:1px solid var(--glass-border);
+  color:var(--qizili-acik);
+  font-size:11px;font-weight:600;
+  letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:18px;
+}
+.bolme-basliq .etiket::before{
+  content:'';width:5px;height:5px;border-radius:50%;
+  background:var(--qizili-acik);
+  box-shadow:0 0 8px var(--qizili-glow);
+}
+.bolme-basliq h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(32px,5vw,54px);
+  font-weight:700;letter-spacing:-1px;
+  line-height:1.1;margin-bottom:14px;
+}
+.bolme-basliq p{color:var(--metn-2);font-size:15.5px;line-height:1.7;}
+
+/* ==================== ŞƏHİD KARTLARI ==================== */
+.kartlar{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:22px;
+}
+.kart{
+  border-radius:var(--radius);
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  overflow:hidden;
+  transition:.5s var(--transition);
+  cursor:pointer;position:relative;
+  opacity:0;transform:translateY(40px);
+}
+.kart.görünən{opacity:1;transform:translateY(0);}
+.kart:hover{
+  transform:translateY(-8px);
+  border-color:var(--glass-border-2);
+  box-shadow:0 30px 60px rgba(0,0,0,.55), 0 0 40px rgba(201,162,39,.1);
+}
+
+.kart-foto{
+  width:100%;aspect-ratio:1/1.05;
+  background:
+    radial-gradient(ellipse at 50% 20%, rgba(201,162,39,.12), transparent 60%),
+    linear-gradient(135deg,#12100c,#1a1712);
+  position:relative;overflow:hidden;
+}
+.kart-foto img{
+  width:100%;height:100%;object-fit:cover;
+  transition:.6s var(--transition);
+  position:relative;z-index:2;
+}
+.kart:hover .kart-foto img{transform:scale(1.06);}
+.kart-foto::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top, rgba(10,8,6,.95) 0%, transparent 55%);
+  z-index:3;pointer-events:none;
+}
+.kart-foto::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 25% 75%, rgba(201,162,39,.15), transparent 45%),
+    radial-gradient(circle at 75% 25%, rgba(201,162,39,.1), transparent 45%);
+  z-index:3;opacity:.7;transition:.5s;pointer-events:none;
+}
+.kart:hover .kart-foto::before{opacity:1;}
+
+.kart-info{padding:18px;position:relative;z-index:4;margin-top:-50px;}
+.kart-info h3{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:700;
+  margin-bottom:6px;letter-spacing:-.2px;
+}
+.kart-info .tarix{
+  font-size:12.5px;color:var(--metn-2);
+  display:flex;align-items:center;gap:7px;
+  margin-bottom:13px;
+}
+.kart-info .tarix svg{width:13px;height:13px;color:var(--qizili);flex-shrink:0;}
+
+.kart-taglar{display:flex;gap:7px;flex-wrap:wrap;}
+.tag{
+  font-size:10.5px;padding:5px 12px;
+  border-radius:100px;font-weight:600;
+  background:var(--qizili-soft);
+  color:var(--qizili-acik);
+  border:1px solid var(--glass-border);
+  letter-spacing:.3px;
+}
+.tag.tund{
+  background:rgba(201,162,39,.08);
+  color:var(--qizili);
+  border-color:rgba(201,162,39,.2);
+}
+
+.kart-foto .placeholder,
+.sehid-foto .placeholder,
+.qalereya-item .placeholder{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  z-index:1;
+}
+.kart-foto .placeholder{
+  font-family:'Cormorant Garamond',serif;
+  font-size:72px;font-weight:700;
+  color:rgba(201,162,39,.12);
+}
+.sehid-foto .placeholder{
+  font-family:'Cormorant Garamond',serif;
+  font-size:100px;font-weight:700;
+  color:rgba(201,162,39,.12);
+}
+.qalereya-item .placeholder{font-size:28px;color:rgba(201,162,39,.15);}
+
+/* ==================== ŞƏHİD SƏHİFƏSİ ==================== */
+.sehid-sehife{
+  position:fixed;inset:0;z-index:2000;
+  background:var(--bg);
+  overflow-y:auto;
+  opacity:0;visibility:hidden;
+  transition:.5s var(--transition);
+  transform:translateY(30px);
+}
+.sehid-sehife.aktiv{opacity:1;visibility:visible;transform:translateY(0);}
+
+.sehid-header{
+  position:sticky;top:0;z-index:10;
+  background:rgba(10,8,6,.88);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border-bottom:1px solid var(--glass-border);
+  padding:16px 0;
+}
+.sehid-header-ic{display:flex;align-items:center;justify-content:space-between;gap:20px;}
+.geri-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:10px 20px;border-radius:100px;
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  color:var(--metn-2);font-size:14px;font-weight:500;
+  transition:.3s var(--transition);
+}
+.geri-btn:hover{background:var(--glass-bg-2);color:var(--metn);border-color:var(--qizili);}
+.sehid-header .kənd{
+  font-size:13px;color:var(--metn-3);
+  font-weight:500;letter-spacing:1px;text-transform:uppercase;
+}
+
+.sehid-body{max-width:900px;margin:0 auto;padding:60px 24px 100px;}
+
+.sehid-hero{
+  display:grid;grid-template-columns:280px 1fr;
+  gap:48px;align-items:start;margin-bottom:64px;
+}
+
+.sehid-foto{
+  aspect-ratio:3/4;border-radius:var(--radius);
+  overflow:hidden;position:relative;
+  background:linear-gradient(135deg,#12100c,#1a1712);
+  border:1px solid var(--glass-border);
+  box-shadow:0 24px 60px rgba(0,0,0,.5);
+}
+.sehid-foto img{width:100%;height:100%;object-fit:cover;position:relative;z-index:2;}
+.sehid-foto::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:40%;
+  background:linear-gradient(to top, rgba(10,8,6,.7), transparent);
+  z-index:3;pointer-events:none;
+}
+
+.sehid-basliq h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(28px,4vw,42px);
+  font-weight:700;line-height:1.15;
+  margin-bottom:8px;letter-spacing:-.5px;
+}
+.sehid-basliq .tam-ad{
+  font-size:15px;color:var(--metn-2);
+  margin-bottom:24px;letter-spacing:.5px;
+}
+
+.sehid-melumat-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:14px;margin-bottom:28px;
+}
+.sehid-melumat-item{
+  padding:14px 16px;border-radius:var(--radius-sm);
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+}
+.sehid-melumat-item .etiket{
+  font-size:10.5px;color:var(--metn-3);
+  font-weight:600;letter-spacing:1.2px;
+  text-transform:uppercase;margin-bottom:5px;
+}
+.sehid-melumat-item .dəyər{font-size:14.5px;font-weight:500;color:var(--metn);}
+
+.sehid-medallar{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;}
+.medal{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 16px;border-radius:100px;
+  background:var(--qizili-soft);
+  border:1px solid var(--glass-border-2);
+  font-size:12.5px;font-weight:600;
+  color:var(--qizili-acik);
+}
+.medal::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--qizili-acik);
+  box-shadow:0 0 8px var(--qizili-glow);
+}
+
+.sehid-bölmə{margin-bottom:48px;}
+.sehid-bölmə h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:26px;font-weight:700;
+  margin-bottom:18px;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--glass-border);
+  position:relative;
+}
+.sehid-bölmə h2::after{
+  content:'';position:absolute;bottom:-1px;left:0;
+  width:60px;height:1px;
+  background:linear-gradient(90deg,var(--qizili-acik),transparent);
+}
+.sehid-bölmə p{
+  font-size:15.5px;color:var(--metn-2);
+  line-height:1.85;margin-bottom:16px;
+  text-align:justify;
+}
+
+/* Ailə tərkibi siyahısı */
+.ailə-siyahı{list-style:none;display:grid;gap:8px;margin-top:12px;}
+.ailə-siyahı li{
+  font-size:14.5px;color:var(--metn-2);
+  padding:10px 16px;border-radius:var(--radius-sm);
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  line-height:1.6;
+}
+.ailə-siyahı li strong{color:var(--qizili-acik);font-weight:600;margin-right:6px;}
+
+.döyüş-yerləri{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;}
+.döyüş-yəri,.döyüş-yeri{
+  padding:10px 18px;border-radius:var(--radius-sm);
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  font-size:13.5px;font-weight:500;
+  color:var(--metn-2);
+  transition:.3s var(--transition);
+}
+.döyüş-yeri:hover{background:var(--glass-bg-2);border-color:var(--qizili);color:var(--metn);}
+
+.qalereya{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:14px;margin-top:20px;
+}
+.qalereya-item{
+  aspect-ratio:1;border-radius:var(--radius-sm);
+  overflow:hidden;position:relative;
+  background:linear-gradient(135deg,#12100c,#1a1712);
+  border:1px solid var(--glass-border);
+  cursor:pointer;transition:.4s var(--transition);
+}
+.qalereya-item:hover{
+  transform:scale(1.03);
+  border-color:var(--qizili);
+  box-shadow:0 12px 30px rgba(0,0,0,.4);
+}
+.qalereya-item img{width:100%;height:100%;object-fit:cover;position:relative;z-index:2;}
+
+/* ==================== LIGHTBOX ==================== */
+.lightbox{
+  position:fixed;inset:0;z-index:5000;
+  background:rgba(5,4,3,.96);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  display:flex;align-items:center;justify-content:center;
+  padding:60px 80px;
+  opacity:0;visibility:hidden;
+  transition:.4s var(--transition);
+}
+.lightbox.aktiv{opacity:1;visibility:visible;}
+
+.lightbox img{
+  max-width:100%;max-height:100%;
+  border-radius:var(--radius-sm);
+  box-shadow:0 40px 100px rgba(0,0,0,.8), 0 0 60px rgba(201,162,39,.15);
+  border:1px solid var(--glass-border-2);
+  transform:scale(.92);
+  transition:.4s var(--transition);
+  object-fit:contain;
+  position:relative;z-index:2;
+}
+.lightbox.aktiv img{transform:scale(1);}
+
+.lightbox-bagla{
+  position:absolute;top:20px;right:24px;z-index:5;
+  width:48px;height:48px;border-radius:14px;
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  color:var(--metn);font-size:24px;
+  display:flex;align-items:center;justify-content:center;
+  transition:.3s var(--transition);
+  cursor:pointer;
+  backdrop-filter:blur(20px);
+}
+.lightbox-bagla:hover{
+  background:rgba(201,162,39,.15);
+  color:var(--qizili-acik);
+  border-color:var(--glass-border-2);
+  transform:rotate(90deg);
+}
+
+.lightbox-əvvəl,.lightbox-sonra{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:5;
+  width:56px;height:56px;border-radius:50%;
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  color:var(--metn);font-size:32px;line-height:1;
+  display:flex;align-items:center;justify-content:center;
+  transition:.3s var(--transition);
+  cursor:pointer;
+  backdrop-filter:blur(20px);
+}
+.lightbox-əvvəl{left:24px;}
+.lightbox-sonra{right:24px;}
+.lightbox-əvvəl:hover,.lightbox-sonra:hover{
+  background:var(--qizili-soft);
+  color:var(--qizili-acik);
+  border-color:var(--glass-border-2);
+}
+
+.lightbox-alt{
+  position:absolute;bottom:24px;left:50%;z-index:5;
+  transform:translateX(-50%);
+  padding:10px 24px;border-radius:100px;
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  color:var(--metn-2);font-size:13.5px;
+  backdrop-filter:blur(20px);
+  white-space:nowrap;max-width:90vw;
+  overflow:hidden;text-overflow:ellipsis;
+}
+
+/* ==================== XATİRƏ DİVARI ==================== */
+.mesajlar{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:22px;
+}
+.mesaj{
+  padding:30px;border-radius:var(--radius);
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  transition:.4s var(--transition);
+  opacity:0;transform:translateY(40px);
+}
+.mesaj.görünən{opacity:1;transform:translateY(0);}
+.mesaj:hover{
+  background:var(--glass-bg-2);
+  border-color:var(--glass-border-2);
+  transform:translateY(-5px);
+  box-shadow:0 24px 48px rgba(0,0,0,.45);
+}
+.mesaj .dırnaq{
+  font-family:'Cormorant Garamond',serif;
+  font-size:60px;line-height:.6;
+  color:var(--qizili);opacity:.3;
+  margin-bottom:14px;display:block;height:36px;
+}
+.mesaj p{font-size:14.5px;color:var(--metn);line-height:1.8;margin-bottom:20px;font-style:italic;}
+.mesaj .muellif{
+  display:flex;align-items:center;gap:12px;
+  padding-top:18px;border-top:1px solid var(--glass-border);
+}
+.avatar{
+  width:40px;height:40px;border-radius:50%;
+  background:linear-gradient(135deg,var(--qizili-tund),var(--qizili-acik));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;
+  font-size:16px;font-weight:700;color:var(--bg);
+  flex-shrink:0;
+}
+.muellif-info strong{display:block;font-size:13.5px;font-weight:600;margin-bottom:2px;}
+.muellif-info span{font-size:11.5px;color:var(--metn-3);}
+
+/* ==================== FOOTER ==================== */
+footer{
+  padding:60px 0 30px;
+  border-top:1px solid var(--glass-border);
+  background:rgba(10,8,6,.6);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+}
+.footer-ic{display:grid;grid-template-columns:2.5fr 1fr 1fr 1.2fr;gap:44px;margin-bottom:44px;}
+.footer-ic h4{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:700;margin-bottom:18px;letter-spacing:.3px;}
+.footer-ic p{font-size:13.5px;color:var(--metn-2);line-height:1.75;max-width:300px;}
+.footer-ic ul{list-style:none;}
+.footer-ic ul li{margin-bottom:10px;}
+.footer-ic ul a{font-size:13.5px;color:var(--metn-2);transition:.25s var(--transition);display:inline-block;}
+.footer-ic ul a:hover{color:var(--qizili-acik);transform:translateX(4px);}
+
+.footer-alt{
+  padding-top:26px;border-top:1px solid var(--glass-border);
+  display:flex;justify-content:space-between;
+  align-items:center;flex-wrap:wrap;gap:14px;
+  font-size:12.5px;color:var(--metn-3);
+}
+.footer-alt .urek{color:var(--qizili);animation:ürekDöyün 2s infinite;}
+@keyframes ürekDöyün{0%,100%{transform:scale(1);opacity:.7;}50%{transform:scale(1.15);opacity:1;}}
+
+.overlay{
+  position:fixed;inset:0;z-index:998;
+  background:rgba(0,0,0,.65);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+  opacity:0;visibility:hidden;
+  transition:.35s var(--transition);
+}
+.overlay.aktiv{opacity:1;visibility:visible;}
+
+.reveal{opacity:0;transform:translateY(40px);transition:.8s var(--transition);}
+.reveal.görünən{opacity:1;transform:translateY(0);}
+
+/* ==================== RESPONSIVE ==================== */
+@media(max-width:1024px){
+  .footer-ic{grid-template-columns:1fr 1fr;gap:36px;}
+  .sehid-hero{grid-template-columns:220px 1fr;gap:32px;}
+}
+@media(max-width:900px){
+  section{padding:80px 0;}
+  .stat-ler{grid-template-columns:repeat(2,1fr);}
+  .sehid-melumat-grid{grid-template-columns:1fr;}
+}
+@media(max-width:768px){
+  .konteyner{padding:0 18px;}
+  .menu{
+    position:fixed;top:0;right:0;
+    width:min(320px,85vw);height:100vh;height:100dvh;
+    flex-direction:column;justify-content:center;
+    align-items:stretch;gap:6px;
+    border-radius:0;padding:80px 24px 40px;
+    background:rgba(18,16,12,.96);
+    backdrop-filter:blur(30px) saturate(180%);
+    -webkit-backdrop-filter:blur(30px) saturate(180%);
+    border-left:1px solid var(--glass-border);
+    transform:translateX(100%);
+    transition:transform .45s var(--transition);
+    z-index:999;
+  }
+  .menu.aktiv{transform:translateX(0);}
+  .menu a{padding:16px 20px;font-size:16px;text-align:left;border-radius:14px;}
+  .menu a:hover{background:var(--glass-bg-2);}
+  .mobil-btn{display:flex;}
+  .hero{padding:120px 0 60px;}
+  .hero h1{letter-spacing:-.5px;}
+  .stat-ler{margin-top:44px;}
+  .footer-ic{grid-template-columns:1fr;gap:30px;}
+  .footer-ic p{max-width:none;}
+  .sehid-hero{grid-template-columns:1fr;gap:28px;}
+  .sehid-foto{max-width:280px;margin:0 auto;}
+  .sehid-body{padding:40px 18px 80px;}
+  .lightbox{padding:50px 16px;}
+  .lightbox-əvvəl,.lightbox-sonra{width:42px;height:42px;font-size:24px;}
+  .lightbox-əvvəl{left:10px;}
+  .lightbox-sonra{right:10px;}
+  .lightbox-bagla{top:12px;right:12px;width:42px;height:42px;}
+}
+@media(max-width:520px){
+  .konteyner{padding:0 16px;}
+  .hero-btnler{flex-direction:column;width:100%;max-width:340px;margin-left:auto;margin-right:auto;}
+  .btn{width:100%;justify-content:center;}
+  .stat{padding:20px 10px;}
+  .stat .ad{font-size:10px;letter-spacing:1px;}
+  .kartlar{grid-template-columns:1fr;}
+  .mesajlar{grid-template-columns:1fr;}
+  .mesaj{padding:22px;}
+  .footer-alt{flex-direction:column;text-align:center;}
+  .qalereya{grid-template-columns:repeat(2,1fr);}
+  .sehid-header-ic{flex-direction:column;gap:12px;align-items:stretch;}
+  .geri-btn{justify-content:center;}
+  .sehid-header .kənd{text-align:center;}
+}
+@media(max-width:380px){
+  .logo-metn .əsas{font-size:16px;}
+  .logo-metn .alt{font-size:8px;letter-spacing:2px;}
+  .stat-ler{gap:10px;}
+  .stat .rəqəm{font-size:24px;}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+  }
+}
+</style>
+</head>
+<body class="yuklenir">
+
+<div id="loader">
+  <div class="loader-emblem"></div>
+  <div class="loader-metn" id="loaderMetn"></div>
+  <div class="loader-bar"></div>
+</div>
+
+<div id="progress"></div>
+
+<div class="bg-qat">
+  <div class="bg-parıltı bg-parıltı-1"></div>
+  <div class="bg-parıltı bg-parıltı-2"></div>
+</div>
+
+<header id="header">
+  <div class="konteyner nav">
+    <a href="#" class="logo">
+      <div class="logo-işarə">
+        <div class="halqa"></div>
+        <div class="halqa-2"></div>
+        <div class="hərf">O</div>
+        <div class="ulduz"></div>
+        <div class="ulduz"></div>
+        <div class="ulduz"></div>
+        <div class="ulduz"></div>
+      </div>
+      <div class="logo-metn">
+        <span class="əsas">Oğuz İgidləri</span>
+        <span class="alt">Xatirə Saytı</span>
+      </div>
+    </a>
+
+    <nav class="menu" id="menu">
+      <a href="#ana-səhifə">Ana səhifə</a>
+      <a href="#şəhidlər">İgidlər</a>
+      <a href="#xatirə">Xatirə divarı</a>
+    </nav>
+
+    <button class="mobil-btn" id="mobilBtn" onclick="menuToggle()" aria-label="Menyu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="overlay" id="overlay" onclick="menuToggle()"></div>
+
+<div class="sehid-sehife" id="sehidSehife">
+  <div class="sehid-header">
+    <div class="konteyner sehid-header-ic">
+      <button class="geri-btn" onclick="sehifeBağla()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Geri qayıt
+      </button>
+      <div class="kənd" id="sehifeKənd"></div>
+    </div>
+  </div>
+  <div class="sehid-body" id="sehidBody"></div>
+</div>
+
+<section class="hero" id="ana-səhifə">
+  <div class="konteyner">
+    <div class="hero-ic">
+      <div class="hero-nisan">
+        <span class="noqtə"></span>
+        <span>Xatirə saytı · Oğuz rayonu</span>
+      </div>
+
+      <h1>
+        <span class="sətir"><span>Vətən yolunda</span></span>
+        <span class="sətir"><span>canlarını fəda edən</span></span>
+        <span class="sətir"><span><em class="qrad">igidlər</em></span></span>
+      </h1>
+
+      <p>
+        Bu sayt Oğuz rayonunun II Qarabağ müharibəsi şəhidlərinin xatirəsini yaşatmaq,
+        onların həyat və döyüş yolunu gələcək nəsillərə çatdırmaq üçün yaradılmışdır.
+      </p>
+
+      <div class="hero-btnler">
+        <a href="#şəhidlər" class="btn btn-ana">
+          <span>İgidləri tanı</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a href="#xatirə" class="btn btn-ikinci">Xatirə divarı</a>
+      </div>
+
+      <div class="stat-ler">
+        <div class="stat">
+          <div class="rəqəm" data-say="26">0</div>
+          <div class="ad">İgid</div>
+        </div>
+        <div class="stat">
+          <div class="rəqəm" data-say="12">0</div>
+          <div class="ad">Kənd</div>
+        </div>
+        <div class="stat">
+          <div class="rəqəm" data-say="1">0</div>
+          <div class="ad">Döyüş</div>
+        </div>
+        <div class="stat">
+          <div class="rəqəm" data-say="5">0</div>
+          <div class="ad">İl xatirə</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="şəhidlər">
+  <div class="konteyner">
+    <div class="bolme-basliq reveal">
+      <div class="etiket">Xatirə kataloqu</div>
+      <h2>Oğuz İgidləri</h2>
+      <p>II Qarabağ müharibəsində canlarını fəda edən qəhrəmanlarımız. Hər biri bir dünya idi.</p>
+    </div>
+
+    <div class="kartlar" id="kartlar"></div>
+  </div>
+</section>
+
+<section id="xatirə">
+  <div class="konteyner">
+    <div class="bolme-basliq reveal">
+      <div class="etiket">Sözümüz</div>
+      <h2>Xatirə divarı</h2>
+      <p>Ailə, dost və yoldaşların ürək sözləri</p>
+    </div>
+    <div class="mesajlar">
+      <div class="mesaj reveal">
+        <span class="dırnaq">"</span>
+        <p>O, həmişə deyərdi ki, Vətən hər şeydən üstündür. Sözünü yerinə yetirdi.</p>
+        <div class="muellif">
+          <div class="avatar">A</div>
+          <div class="muellif-info"><strong>Anası</strong><span>Oğuz rayonu</span></div>
+        </div>
+      </div>
+      <div class="mesaj reveal">
+        <span class="dırnaq">"</span>
+        <p>Yoldaşım, qardaşım idi. Onunla keçirdiyim hər gün mənim üçün dərs oldu.</p>
+        <div class="muellif">
+          <div class="avatar">M</div>
+          <div class="muellif-info"><strong>Döyüş yoldaşı</strong><span>Vətən müharibəsi</span></div>
+        </div>
+      </div>
+      <div class="mesaj reveal">
+        <span class="dırnaq">"</span>
+        <p>Adı tarixə yazıldı, xatirəsi qəlbimizdə əbədi yaşayacaq.</p>
+        <div class="muellif">
+          <div class="avatar">O</div>
+          <div class="muellif-info"><strong>Oğuz sakinləri</strong><span>Rayon icması</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="konteyner">
+    <div class="footer-ic">
+      <div>
+        <div class="logo" style="margin-bottom:16px;">
+          <div class="logo-işarə">
+            <div class="halqa"></div>
+            <div class="halqa-2"></div>
+            <div class="hərf">O</div>
+          </div>
+          <div class="logo-metn">
+            <span class="əsas">Oğuz İgidləri</span>
+            <span class="alt">Xatirə Saytı</span>
+          </div>
+        </div>
+        <p>Oğuz rayonunun II Qarabağ müharibəsi şəhidlərinin xatirəsinə həsr olunmuş məlumat saytı. Adları əbədi yaşayacaq.</p>
+      </div>
+      <div>
+        <h4>Bölmələr</h4>
+        <ul>
+          <li><a href="#ana-səhifə">Ana səhifə</a></li>
+          <li><a href="#şəhidlər">İgidlər</a></li>
+          <li><a href="#xatirə">Xatirə divarı</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Məlumat</h4>
+        <ul>
+          <li><a href="#ana-səhifə">Haqqında</a></li>
+          <li><a href="#">Mənbələr</a></li>
+          <li><a href="#">Əlaqə</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Əlaqə</h4>
+        <ul>
+          <li><a href="mailto:info@oguz-igidleri.az">info@oguz-igidleri.az</a></li>
+          <li><a href="#">Oğuz, Azərbaycan</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-alt">
+      <span>© 2025 Oğuz İgidləri · Bütün hüquqlar qorunur</span>
+      <span>İgidlərimizin xatirəsinə <span class="urek">♥</span></span>
+    </div>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-bagla" onclick="lightboxBağla()" aria-label="Bağla">×</button>
+  <button class="lightbox-əvvəl" onclick="lightboxDəyiş(-1)" aria-label="Əvvəlki">‹</button>
+  <button class="lightbox-sonra" onclick="lightboxDəyiş(1)" aria-label="Sonrakı">›</button>
+  <img src="" alt="" id="lightboxImg" />
+  <div class="lightbox-alt" id="lightboxAlt"></div>
+</div>
+
+<script>
+/* ==================== LOADER ==================== */
+const loaderMetn = document.getElementById('loaderMetn');
+"OĞUZ · İGİDLƏRİ".split('').forEach((h,i)=>{
+  const s=document.createElement('span');
+  s.textContent = h===' '?'\u00A0':h;
+  s.style.animationDelay=(0.5+i*0.05)+'s';
+  loaderMetn.appendChild(s);
+});
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    document.getElementById('loader').classList.add('gizlən');
+    document.body.classList.remove('yuklenir');
+    setTimeout(statAnimasiya,400);
+  },2200);
+});
+
+/* ==================== ŞƏHİD MƏLUMATLARI ==================== */
+const ŞƏHİDLƏR = [
+  {
+    id:"pasayev-mehebbet", ad:"Məhəbbət Paşayev", ata:"Vaqif oğlu",
+    doğum:"5 avqust 1999", şəhadət:"29 sentyabr 2020", kənd:"Oğuz şəhəri",
+    rütbə:"Müddətdən artıq hərbi qulluqçu",
+    medallar:["Vətən uğrunda","Suqovuşanın azad olunmasına görə"],
+    döyüşYerləri:["Suqovuşan","Goran","Ağcakənd","Ballıqaya"],
+    bio:"Məhəbbət Vaqif oğlu Paşayev 5 avqust 1999-cu ildə Şəki rayonunun Bolludərə kəndində anadan olub. 2005-ci ildə Bolludərə kəndində birinci sinifə gedib. 2006-cı ildə ailəsi Oğuz şəhərinə köçüb və təhsilini Oğuz şəhər 3 nömrəli məktəb-liseydə davam etdirərək 2016-cı ildə bitirib.\n\n26 aprel 2018-ci ildə Azərbaycan Silahlı Qüvvələrinə müddətli həqiqi hərbi xidmətə çağırılıb. Hərbi xidmətini Goran, Ağcakənd, Ballıqaya bölgəsində yerinə yetirib. Əsgəri xidmətdə olarkən öz borcunu ləyaqətlə yerinə yetirib, hərbi hissə komandanlığı tərəfindən dəfələrlə Fəxri Fərmanlara layiq görülüb. 1 oktyabr 2019-cu ildə xidmətini uğurla başa vurub. Ordu sıralarından qayıtdıqdan sonra müxtəlif işlərdə çalışıb. 2020-ci ilin avqustundan müddətdən artıq xidmət edən hərbi qulluqçu kimi Azərbaycan Ordusunda xidmətə başlayıb.\n\nVətən müharibəsi zamanı Suqovuşan uğrunda gedən döyüşlərdə qəhrəmancasına vuruşaraq şəhidlik zirvəsinə yüksəlib. 30 sentyabr 2020-ci ildə Oğuz Şəhidlər Xiyabanında dəfn olunub.\n\nPrezident İlham Əliyevin 15.12.2020-ci il tarixli Sərəncamına əsasən ölümündən sonra \"Vətən uğrunda\" medalı ilə, 05.11.2021-ci il tarixli Sərəncamına əsasən isə \"Suqovuşanın azad olunmasına görə\" medalı ilə təltif edilib."
+  },
+  {
+    id:"ceferli-sahin", ad:"Şahin Cəfərli", ata:"Şamil oğlu",
+    doğum:"28 iyun 1994", şəhadət:"1 oktyabr 2020", kənd:"Xalxalqışlaq",
+    rütbə:"Müddətli həqiqi hərbi xidmət qulluqçusu",
+    medallar:["Vətən uğrunda","Kəlbəcərin azad olunmasına görə","Hərbi xidmətlərə görə"],
+    döyüşYerləri:["Murovdağ","Kəlbəcər"],
+    bio:"Şahin Şamil oğlu Cəfərli 28 iyun 1994-cü ildə anadan olub. 2012-2014-cü illərdə Gəncə şəhərində N saylı hərbi hissədə hərbi xidmətdə olub. Xidmətdə olarkən atası Şamil dayı dəfələrlə komandanlığın təşəkkür məktublarını alıb. Onun ən böyük arzusu torpaqlarımızın düşməndən azad edilməsi idi. 2016-cı ildə Aprel döyüşlərində sərrast atıcı kimi iştirak edib. 2020-ci ilin sentyabrında səfərbərliklə bağlı hərbi təlim toplanışına cəlb edilmişdi.\n\nVətən müharibəsi zamanı Murovdağ döyüşlərində savaşıb. 1 oktyabr 2020-ci ildə Murovdağ döyüşlərində qəhrəmancasına vuruşaraq şəhid olub. 2 oktyabr 2020-ci ildə Xalxalqışlaq kəndində dəfn olunub.\n\nPrezident İlham Əliyevin 15.12.2020-ci il tarixli Sərəncamına əsasən ölümündən sonra \"Vətən uğrunda\" medalı, 29.12.2020-ci il tarixli Sərəncamına əsasən \"Kəlbəcərin azad olunmasına görə\" medalı, 30.12.2020-ci il tarixli Sərəncamına əsasən isə \"Hərbi xidmətlərə görə\" medalı ilə təltif edilib."
+  },
+  {
+    id:"ismayilov-vusal", ad:"Vüsal İsmayılov", ata:"Nəbi oğlu",
+    doğum:"9 aprel 1980", şəhadət:"4 oktyabr 2020", kənd:"Xalxal",
+    rütbə:"Baş gizir",
+    medallar:["Vətən uğrunda","Füzulinin azad olunmasına görə"],
+    döyüşYerləri:["Füzuli","Lələtəpə"],
+    bio:"Vüsal Nəbi oğlu İsmayılov 9 aprel 1980-ci ildə Oğuz rayonunun Xalxal kəndində anadan olub. 1986-1997-ci illərdə Y. Şəfiyev adına Xalxal kənd tam orta məktəbində təhsil alıb. Ailəli idi. 1 qızı və 2 oğlu yadigar qaldı.\n\n1998-2000-ci illərdə Azərbaycan Silahlı Qüvvələrinin sıralarında müddətli həqiqi hərbi xidmətdə olub. 2002-ci ildən \"N\" saylı hərbi hissədə müddətdən artıq həqiqi hərbi xidmət qulluqçusu olaraq xidmət edib. Piyadanın Döyüş Maşınında (PDM) Maşın Komandiri vəzifəsində xidmət edib və 2016-cı ilin 2-5 aprelində baş verən Aprel döyüşləri zamanı Lələtəpə istiqamətində gedən döyüşlərdə savaşıb.\n\nVətən müharibəsi zamanı Füzulinin azadlığı uğrunda gedən döyüşlərdə savaşıb. 4 oktyabr 2020-ci ildə Füzuli döyüşləri zamanı şəhid olub. Oğuz rayonunun Xalxal kəndində dəfn olunub.\n\nPrezident İlham Əliyevin 15.12.2020-ci il tarixli Sərəncamına əsasən ölümündən sonra \"Vətən uğrunda\" medalı, 25.12.2020-ci il tarixli Sərəncamına əsasən isə \"Füzulinin azad olunmasına görə\" medalı ilə təltif edilib."
+  },
+  {
+    id:"feyzullayev-beyrek", ad:"Beyrək Feyzullayev", ata:"Seyfullah oğlu",
+    doğum:"30 aprel 1997", şəhadət:"4 oktyabr 2020", kənd:"Baş Daşağıl",
+    rütbə:"Xüsusi Təyinatlı Qüvvələr (XTQ)",
+    medallar:["Vətən uğrunda","Cəbrayılın azad olunmasına görə","Hərbi xidmətlərə görə","Füzulinin azad olunmasına görə","Azərbaycan Bayrağı ordeni"],
+    döyüşYerləri:["Füzuli","Cəbrayıl"],
+    bio:"Beyrək Seyfullah oğlu Feyzullayev 30 aprel 1997-ci ildə Oğuz rayonu Baş Daşağıl kəndi, Malıx yaşayış sahəsində anadan olub. 2003-cü ildə Malıx əsas məktəbinə daxil olub. 2012-ci ildə həmin məktəbin 9-cu sinfini bitirib. Daha sonra Ağdaş şəhərinin Abad kənd məktəbində 10-cu sinifi davam etdirib, 2014-cü ildə həmin məktəbi bitirib. Subay idi.\n\n2015-ci ilin aprel ayında Naxçıvan Muxtar Respublikası HHM-in N saylı hərbi hissəsində həqiqi hərbi xidmətə çağırılıb. 2016-cı ilin oktyabr ayında xidmətini başa vurub. Daha sonra Mingəçevir şəhərində N saylı hərbi hissəsində müddətdən artıq həqiqi hərbi xidmət hərbi qulluqçusu kimi kəşfiyyat bölüyündə xidmətə başlayıb. 2018-ci ildə SAT kurslarına daxil olub, 6 aylıq ağır kurslardan sonra uğurla başa vurub sertifikat əldə edib. 2020-ci ildə sənədlərini toplayıb Xüsusi Təyinatlı Qüvvələrə təqdim edib, 6 aylıq ağır kurslardan sonra \"qırmızı beret\" sertifikatını qazanıb.\n\nVətən müharibəsi zamanı Füzuli-Cəbrayıl istiqamətində gedən gərgin döyüşlərdə savaşıb. Adı kimi dastan yazıb. Sadəcə süngü-bıçaq ilə onlarla düşmənin canlı qüvvəsini sıradan çıxarıb. 2020-ci ilin oktyabr ayında Füzulinin kəndlərindən birində gecə saat 02:00-03:00 radələrində düşmənlə təxminən 10 metr məsafədə üz-üzə döyüşdə olublar. 22 XTQ döyüşçüsü 49 ermənini məhv edib, 2 şəhid, 5 yaralı olub. O, 2 şəhiddən biri Beyrək idi. 3 metr məsafədən 4-5 güllə dəyib. Ona atəş açan ermənini şəxsən özü öldürüb. Yaralı vəziyyətdə 1 saata yaxın döyüşməyə davam edib, lakin daha artıq dözə bilməyib və şəhid olub. Şəhid olmamışdan 2 gün əvvəl təkbaşına NSV pulemyotu ilə düşmənin içində 3 nəfər şəxsi heyəti olan BMP texnikasını içindəki şəxsi heyətlə birgə partladıb. Yanında döyüşən yoldaşları deyir ki, ümumi 30-a yaxın erməni məhv edib. 4 oktyabr 2020-ci ildə Füzuli-Cəbrayıl istiqamətində qəhrəmancasına şəhid olub. 5 oktyabr 2020-ci ildə Oğuz rayonu Baş Daşağıl kənd qəbiristanlığında dəfn olunub.\n\nÖlümündən sonra Prezident İlham Əliyevin Sərəncamları ilə \"Vətən uğrunda\", \"Cəbrayılın azad olunmasına görə\", \"Hərbi xidmətlərə görə\", \"Füzulinin azad olunmasına görə\" medalları və \"Azərbaycan Bayrağı\" ordeni ilə təltif edilib."
+  },
+  {
+    id:"memmedov-abit", ad:"Abit Məmmədov", ata:"Asif oğlu",
+    doğum:"4 aprel 1994", şəhadət:"4 oktyabr 2020", kənd:"Dəymədərə",
+    rütbə:"Əsgər",
+    medallar:["Vətən uğrunda","Kəlbəcərin azad olunmasına görə"],
+    döyüşYerləri:["Murovdağ","Kəlbəcər"],
+    bio:"Abid Asif oğlu Məmmədov 4 aprel 1994-cü ildə Oğuz rayonunun Dəymədərə kəndində anadan olub. 2000-ci ildə şəhid Elburus Haşımov adına Dəymədərə kənd tam orta məktəbinə daxil olub, 2011-ci ildə məktəbi bitirib. Oğuz Qarğıdalı Emalı və Qlükoza İstehsalı zavodunda operator kimi çalışıb. Ailəli idi, Əli adlı övladı yadigar qaldı.\n\nAzərbaycan Silahlı Qüvvələrində müddətli həqiqi hərbi xidmət keçib.\n\nVətən müharibəsi zamanı Murovdağ döyüşlərində iştirak edib. 4 oktyabr 2020-ci ildə Murovdağ istiqamətində gedən döyüşlərdə qəhrəmancasına vuruşaraq şəhid olub. Həmin gün Oğuz rayonunun Dəymədərə kəndində dəfn olunub.\n\nPrezident İlham Əliyevin 15.12.2020-ci il tarixli Sərəncamına əsasən ölümündən sonra \"Vətən uğrunda\" medalı, 29.12.2020-ci il tarixli Sərəncamına əsasən isə \"Kəlbəcərin azad olunmasına görə\" medalı ilə təltif edilib."
+  },
+  {
+    id:"babayev-elman", ad:"Elman Babayev", ata:"Telman oğlu",
+    doğum:"1 noyabr 1994", şəhadət:"29 sentyabr 2020", kənd:"Padar",
+    rütbə:"Müddətli həqiqi hərbi xidmət qulluqçusu",
+    medallar:["Vətən uğrunda","Kəlbəcərin azad olunmasına görə","Hərbi xidmətlərə görə"],
+    döyüşYerləri:["Murovdağ","Kəlbəcər"],
+    bio:"Elman Telman oğlu Babayev 1 noyabr 1994-cü ildə Oğuz rayonunun Padar kəndində anadan olub. 2001-ci ildə şəhid Arzu Əliyev adına Padar kənd tam orta məktəbinin 1-ci sinfinə gedib. 2007-ci ildən təhsilini Oğuz şəhər 3 nömrəli məktəb-liseydə davam etdirib, 2012-ci ildə təhsilini başa vurub. Ailəli idi, 2 övladı yadigar qaldı.\n\n2013-2014-cü illərdə Azərbaycan Silahlı Qüvvələrində müddətli həqiqi hərbi xidmət keçib.\n\nVətən müharibəsi zamanı Murovdağ döyüşlərində savaşıb. 29 sentyabr 2020-ci ildə Murovdağ döyüşlərində qəhrəmancasına vuruşaraq şəhid olub. 4 oktyabr 2020-ci ildə Oğuz Şəhidlər Xiyabanında dəfn olunub.\n\nPrezident İlham Əliyevin 15.12.2020-ci il tarixli Sərəncamına əsasən ölümündən sonra \"Vətən uğrunda\" medalı, 29.12.2020-ci il tarixli Sərəncamına əsasən \"Kəlbəcərin azad olunmasına görə\" medalı, 30.12.2020-ci il tarixli Sərəncamına əsasən isə \"Hərbi xidmətlərə görə\" medalı ilə təltif edilib."
+  },
+  {
+    id:"sirelizade-suleyman", ad:"Süleyman Şirəlizadə", ata:"İlham oğlu",
+    doğum:"6 iyun 2001", şəhadət:"5 oktyabr 2020", kənd:"Padar",
+    rütbə:"Əsgər",
+    medallar:["Vətən uğrunda"],
+    döyüşYerləri:["Ağdərə","Tülkü dərəsi"],
+    bio:"Süleyman İlham oğlu Şirəlizadə 6 iyun 2001-ci ildə Oğuz rayonunun Padar kəndində anadan olub. 2007-ci ildə Arzu Əliyev adına Padar kənd tam orta məktəbinə daxil olub, 2018-ci ildə məktəbi bitirib.\n\n2019-cu ilin iyulunda Azərbaycan Silahlı Qüvvələrinə müddətli həqiqi hərbi xidmətə çağırılıb. Hərbi xidmətinin başa çatmasına bir neçə ay qalmış Vətən müharibəsi başlamış və döyüşlərə qatılmışdır.\n\nVətən müharibəsi zamanı Ağdərə istiqamətində savaşıb. Ağdərə istiqamətində \"Tülkü dərəsi\" deyilən ərazidə 5 oktyabr 2020-ci il tarixində şəhid olub. 6 oktyabr 2020-ci ildə Oğuz rayonu Padar kənd Şəhidlər Xiyabanında dəfn edilib.\n\nPrezident İlham Əliyevin 15.12.2020-ci il tarixli Sərəncamına əsasən ölümündən sonra \"Vətən uğrunda\" medalı ilə təltif edilib."
+  },
+  {
+    id:"efendiyev-nurlan", ad:"Nurlan Əfəndiyev", ata:"Mürvət oğlu",
+    doğum:"8 oktyabr 1995", şəhadət:"6 oktyabr 2020", kənd:"Xalxalqışlaq",
+    rütbə:"Müddətli həqiqi hərbi xidmət qulluqçusu",
+    medallar:["Vətən uğrunda","Kəlbəcərin azad olunmasına görə","Hərbi xidmətlərə görə"],
+    döyüşYerləri:["Murovdağ","Kəlbəcər"],
+    bio:"Nurlan Mürvət oğlu Əfəndiyev 8 oktyabr 1995-ci ildə Oğuz rayonunun Xalxalqışlaq kəndində anadan olub. 2001-ci ildə Xalxalqışlaq kənd məktəbinin 1-ci sinfinə gedib. 2012-ci ildə şəhid İntizam Rəhimov adına Qumlaq kənd tam orta məktəbini bitirib. Ailəsi sadə, zəhmətkeş kəndli ailəsi idi. Uşaqlıqdan zəhmətə bağlı böyüyüb, bütün təsərrüfat işlərində ailəyə kömək edib. Bərbər ixtisasına yiyələnib. Ən böyük arzusu yanğınsöndürmə işində işləmək idi. İdmanın qaçış növü ilə məşğul olub, rayon yarışlarında iştirak edib.\n\n2014-2015-ci illərdə Gəncə şəhərində N saylı hərbi hissədə hərbi xidmətdə olub. Dəfələrlə komandanlıq tərəfindən təşəkkürnamələr alıb, yaxşı xidmət etdiyinə görə iki dəfə məzuniyyətə buraxılıb.\n\nVətən müharibəsi zamanı Murovdağ döyüşlərində savaşıb. 6 oktyabr 2020-ci ildə Murovdağ döyüşlərində qəhrəmancasına vuruşaraq şəhid olub. 7 oktyabr 2020-ci ildə Xalxalqışlaq kəndində dəfn olunub.\n\nPrezident İlham Əliyevin 15.12.2020-ci il tarixli Sərəncamına əsasən ölümündən sonra \"Vətən uğrunda\" medalı, 29.12.2020-ci il tarixli Sərəncamına əsasən \"Kəlbəcərin azad olunmasına görə\" medalı, 30.12.2020-ci il tarixli Sərəncamına əsasən isə \"Hərbi xidmətlərə görə\" medalı ilə təltif edilib."
+  },
+  {
+    id:"mustafayev-rasim", ad:"Rasim Mustafayev", ata:"Ərzuman oğlu",
+    doğum:"28 mart 1990", şəhadət:"7 oktyabr 2020", kənd:"Xaçmaz",
+    rütbə:"Müddətli həqiqi hərbi xidmət qulluqçusu",
+    medallar:["Vətən uğrunda","Hərbi xidmətlərə görə"],
+    döyüşYerləri:["Murovdağ","Kəlbəcər"],
+    bio:"Rasim Ərzuman oğlu Mustafayev 28 mart 1990-cı ildə Oğuz rayonunun Xaçmaz kəndində anadan olub. 1997-ci ildə Vüqar İbrahimov adına 2 nömrəli tam orta məktəbinə daxil olub, 2008-ci ildə məktəbi bitirib.\n\nAzərbaycan Silahlı Qüvvələrində müddətli həqiqi hərbi xidmət keçib.\n\nVətən müharibəsi zamanı Murovdağ döyüşlərində savaşıb. 7 oktyabr 2020-ci ildə Murovdağ döyüşlərində qəhrəmancasına vuruşaraq şəhid olub. Oğuz rayonunun Xaçmaz kənd Şəhidlər Xiyabanında dəfn olunub. Özündən sonra 2 yaşlı oğlu yadigar qalıb.\n\nPrezident İlham Əliyevin 15.12.2020-ci il tarixli Sərəncamına əsasən ölümündən sonra \"Vətən uğrunda\" medalı, 30.12.2020-ci il tarixli Sərəncamına əsasən isə \"Hərbi xidmətlərə görə\" medalı ilə təltif edilib."
+  },
+  {
+    id:"nuraliyev-elsen", ad:"Elşən Nuralıyev", ata:"Rövşən oğlu",
+    doğum:"16 dekabr 1997", şəhadət:"12 oktyabr 2020", kənd:"Sincan",
+    rütbə:"Əsgər (tankçı)",
+    medallar:["Vətən uğrunda","Füzulinin azad olunmasına görə"],
+    döyüşYerləri:["Füzuli","Goranboy","Ağcabədi"],
+    bio:"Elşən Rövşən oğlu Nuralıyev 16 dekabr 1997-ci ildə Oğuz rayonunun Sincan kəndində anadan olub. 2006-cı ildə Əsabəli Abdulhüseynov adına Sincan kənd tam orta məktəbə daxil olub, 2017-ci ildə məktəbi bitirib.\n\n2019-cu ilin aprelində Azərbaycan Silahlı Qüvvələrinə müddətli həqiqi hərbi xidmətə çağırılıb. Hərbi xidmətdə fərqləndiyinə görə məzuniyyətə buraxılıb. Hərbi xidmətinin başa çatmasına 5 gün qalmış Vətən müharibəsi başlayıb və tankçı kimi 29 sentyabrda Goranboy, Ağcabədi, Füzuli istiqamətinə aparılıb.\n\nVətən müharibəsi zamanı Füzuli döyüşlərində savaşıb. Füzuli uğrunda gedən döyüşlərdə düşmən snayperindən açılan atəşlə şəhidlik zirvəsinə yüksəlib. 12 oktyabr 2020-ci ildə Sincan kəndində dəfn olunub.\n\nPrezident İlham Əliyevin 15.12.2020-ci il tarixli Sərəncamına əsasən ölümündən sonra \"Vətən uğrunda\" medalı, 25.12.2020-ci il tarixli Sərəncamına əsasən isə \"Füzulinin azad olunmasına görə\" medalı ilə təltif edilib."
+  },
+  {
+    id:"isazade-sefa", ad:"Səfa İsazadə", ata:"Əmirxan oğlu",
+    doğum:"17 may 1999", şəhadət:"14 oktyabr 2020", kənd:"Xaçmaz",
+    rütbə:"Əsgər",
+    medallar:["Vətən uğrunda","Suqovuşanın azad olunmasına görə"],
+    döyüşYerləri:["Suqovuşan","Talış"],
+    bio:"Səfa Əmirxan oğlu İsazadə 17 may 1999-cu ildə Oğuz rayonunun Xaçmaz kəndində anadan olub. 2005-2016-cı illərdə şəhid Vüqar İbrahimov adına Xaçmaz kənd 2 nömrəli tam orta məktəbdə oxuyub.\n\n2017-2019-cu illərdə Azərbaycan Silahlı Qüvvələrində müddətli həqiqi hərbi xidmət keçib.\n\nVətən müharibəsinin 3-cü günü, 29 sentyabr 2020-ci ildə müharibəyə yollanıb. Talış kəndinin azad olunması uğrunda əməliyyatlarda iştirak edib. 14 oktyabr 2020-ci ildə Suqovuşan döyüşlərində qəhrəmancasına vuruşaraq şəhid olub. 19 oktyabr 2020-ci ildə Oğuz rayonunun Xaçmaz kənd Şəhidlər Xiyabanında dəfn olunub.\n\nPrezident İlham Əliyevin 15.12.2020-ci il tarixli Sərəncamına əsasən ölümündən sonra \"Vətən uğrunda\" medalı, 29.12.2020-ci il tarixli Sərəncamına əsasən isə \"Suqovuşanın azad olunmasına görə\" medalı ilə təltif edilib."
+  },
+  {
+    id:"feyzullayev-zahir", ad:"Zahir Feyzullayev", ata:"Eyvaz oğlu",
+    doğum:"24 dekabr 1992", şəhadət:"20 oktyabr 2020", kənd:"Muxas",
+    rütbə:"Leytenant",
+    medallar:["Vətən uğrunda","Şuşanın azad olunmasına görə","Hərbi xidmətlərə görə","Füzulinin azad olunmasına görə","Xocavəndin azad olunmasına görə"],
+    döyüşYerləri:["Füzuli","Zəngilan","Xocavənd","Tuğ kəndi","Şuşa"],
+    bio:"Zahir Eyvaz oğlu Feyzullayev 24 dekabr 1992-ci ildə Oğuz rayonunun Muxas kəndində anadan olub. 1999-2007-ci illərdə A. Əhmədov adına Muxas kənd tam orta məktəbində, 2007-2010-cu illərdə isə Oğuz şəhərində E. Abdullayev adına 2 nömrəli tam orta məktəbdə təhsil alıb.\n\n2011-ci il yanvarın 1-də Oğuz rayon hərbi komissarlığı tərəfindən hərbi xidmətə çağırılıb. Daxili Qoşunların N saylı hərbi hissəsində xidmətə başlayıb, 2012-ci ilin iyul ayında xidmətini bitirib. 2013-cü il noyabrın 12-də Müdafiə Nazirliyinin gizir hazırlıq kursuna qəbul olub, 2014-cü il yanvarın 25-də həmin kursu bitirib. 2014-2018-ci illərdə müxtəlif hərbi hissələrdə xüsusi təyinatlı qrup komandiri, komandir müavini vəzifələrində xidmət edib. Qəhrəmanlıqlarına görə 2018-ci ilin iyulun 2-də kiçik leytenant hərbi rütbəsi, 2019-cu ilin iyulun 2-də leytenant hərbi rütbəsi alıb.\n\n2015-2019-cu illərdə Türkiyənin Ankara, Kayseri, Kars şəhərlərində müxtəlif hərbi kurslarda (Görüntülü hədəf qiymətləndirmə, Hərbi sərbəst paraşut, Statik təməl paraşut, Statik paraşütçü buraxıcı, \"Qış-2019\" təlimi) iştirak edib. \"Azərbaycan Ordusunun 100 illiyi\", \"Hərbi xidmətdə fərqlənməyə görə\" 3-cü dərəcəli medalları və bir çox tərifnamələrə layiq görülüb.\n\nVətən müharibəsi zamanı Füzulinin, Zəngilanın və Xocavəndin azadlığı uğrunda gedən döyüşlərdə savaşıb. Döyüşlər zamanı bir neçə dəfə tabeçiliyində olan əsgərləri döyüş meydanından təxliyə edib, həmçinin Ermənistan Ordusunun canlı qüvvəsinin məhv edilməsində fərqlənib. Döyüş yoldaşının torpağa tapşırıldığı gün onlarla ermənini məhv edərək dəfn yerinə zəng edib yoldaşının qisasını aldığını bildirib. 20 oktyabr 2020-ci ildə Xocavənd döyüşləri zamanı Tuğ kəndi istiqamətində şəhid olub. Oğuz rayonunun Muxas kəndində dəfn olunub.\n\nPrezident İlham Əliyevin Sərəncamları ilə ölümündən sonra \"Vətən uğrunda\", \"Şuşanın azad olunmasına görə\", \"Hərbi xidmətlərə görə\", \"Füzulinin azad olunmasına görə\" və \"Xocavəndin azad olunmasına görə\" medalları ilə təltif edilib."
+  },
+  {
+    id:"eliyev-anar", ad:"Anar Əliyev", ata:"Talıb oğlu",
+    doğum:"16 may 1991", şəhadət:"26 oktyabr 2020", kənd:"Oğuz şəhəri",
+    rütbə:"Müddətli həqiqi hərbi xidmət qulluqçusu",
+    medallar:["Vətən uğrunda","Füzulinin azad olunmasına görə"],
+    döyüşYerləri:["Füzuli"],
+    bio:"Anar Talıb oğlu Əliyev 16 may 1991-ci ildə Oğuz rayonunda anadan olub. 1998-2009-cu illərdə Oğuz şəhər şəhid E.Abdullayev adına 2 nömrəli tam orta məktəbdə oxuyub. Ailəli idi, 1 oğlan övladı yadigar qaldı.\n\n2009-2011-ci illərdə Azərbaycan Silahlı Qüvvələrində müddətli həqiqi hərbi xidmət keçib.\n\nVətən müharibəsi zamanı Füzuli döyüşlərində savaşıb. 26 oktyabr 2020-ci ildə Füzuli döyüşlərində qəhrəmancasına vuruşaraq şəhid olub. 27 oktyabr 2020-ci ildə Oğuz Şəhidlər Xiyabanında dəfn olunub.\n\nPrezident İlham Əliyevin 15.12.2020-ci il tarixli Sərəncamına əsasən ölümündən sonra \"Vətən uğrunda\" medalı, 25.12.2020-ci il tarixli Sərəncamına əsasən isə \"Füzulinin azad olunmasına görə\" medalı ilə təltif edilib."
+  },
+  {
+    id:"ehmedli-nurlan", ad:"Nurlan Əhmədli", ata:"Rəhim oğlu",
+    doğum:"12 oktyabr 1996", şəhadət:"27 oktyabr 2020", kənd:"Xaçmaz",
+    rütbə:"Müddətli həqiqi hərbi xidmət qulluqçusu",
+    medallar:["Vətən uğrunda","Füzulinin azad olunmasına görə"],
+    döyüşYerləri:["Füzuli"],
+    bio:"Nurlan Rəhim oğlu Əhmədli 12 oktyabr 1996-cı ildə Oğuz rayonunun Xaçmaz kəndində anadan olub. 2003-cü ildə M. F. Axundov adına 1 nömrəli tam orta məktəbinə daxil olub, 2014-cü ildə məktəbi bitirib. 2014-2018-ci illərdə Azərbaycan Texniki Universitetində radiotexnika mühəndisliyi fakültəsi üzrə Bakalavr təhsili alıb.\n\n2019-cu ilin yanvarında Azərbaycan Silahlı Qüvvələrinə müddətli həqiqi hərbi xidmətə çağırılıb, 2020-ci ilin iyulunda xidmətini uğurla başa vurub.\n\nVətən müharibəsi zamanı Füzuli döyüşlərində savaşıb. Füzuli uğrunda gedən döyüşlərdə qəhrəmancasına vuruşaraq şəhidlik zirvəsinə yüksəlib. 27 oktyabr 2020-ci ildə Oğuz rayonunun Xaçmaz kənd Şəhidlər Xiyabanında dəfn olunub.\n\nPrezident İlham Əliyevin 15.12.2020-ci il tarixli Sərəncamına əsasən ölümündən sonra \"Vətən uğrunda\" medalı, 25.12.2020-ci il tarixli Sərəncamına əsasən isə \"Füzulinin azad olunmasına görə\" medalı ilə təltif edilib."
+  },
+  {
+    id:"memmedov-tural", ad:"Tural Məmmədov", ata:"Arif oğlu",
+    doğum:"1 may 1995", şəhadət:"29 oktyabr 2020", kənd:"Sincan",
+    rütbə:"Gizir",
+    medallar:["Vətən uğrunda"],
+    döyüşYerləri:["Suqovuşan","Talış","Ağdərə"],
+    bio:"Tural Arif oğlu Məmmədov 1 may 1995-ci ildə Oğuz rayonunun Sincan kəndində anadan olub. 2001-ci ildə şəhid Əsabəli Abdulhüseynov adına Sincan kənd tam orta məktəbinə daxil olub, 2012-ci ildə məktəbi bitirib.\n\n2013-cü ildə Azərbaycan Silahlı Qüvvələrində müddətli həqiqi hərbi xidmət keçib. Əsgəri xidmətini başa vursa da Azərbaycan Ordusunda xidmətini davam etdirib. 2016-cı ildə Aprel döyüşlərində iştirak edib.\n\nVətən müharibəsinin ilk günlərindən döyüşlərdə iştirak edib. Suqovuşanın, Talış kəndinin azad olunması uğrundakı döyüşlərdə iki dəfə yaralanıb, həkimdən icazəsi olmasına baxmayaraq yenidən döyüşlərə qatılıb və 29 oktyabr 2020-ci ildə Ağdərə istiqamətində gedən döyüşlərdə qəhrəmancasına vuruşaraq şəhid olub. 29 oktyabr 2020-ci ildə Oğuz rayonunun Sincan kəndində dəfn olunub.\n\nPrezident İlham Əliyevin 15.12.2020-ci il tarixli Sərəncamına əsasən ölümündən sonra \"Vətən uğrunda\" medalı ilə təltif edilib."
+  },
+  {
+    id:"lillahov-ferid", ad:"Fərid Lillahov", ata:"Loğman oğlu",
+    doğum:"6 mart 1999", şəhadət:"8 noyabr 2020", kənd:"Baş Daşağıl",
+    rütbə:"Baş əsgər",
+    medallar:["Vətən uğrunda","Cəsur döyüşçü","Şuşanın azad olunmasına görə"],
+    döyüşYerləri:["Şuşa","Xankəndi"],
+    bio:"Fərid Loğman oğlu Lillahov 6 mart 1999-cu ildə Oğuz rayonunun Baş Daşağıl kəndində Loğman və İntizar Lillahovların ailəsində anadan olub. 2005-2016-cı illərdə Ə.Həbibullayev adına Baş Daşağıl kənd tam orta məktəbində təhsil alıb. Subay idi.\n\n2019-2020-ci illərdə Azərbaycan Silahlı Qüvvələrinin sıralarında müddətli həqiqi hərbi xidmət edib.\n\nVətən müharibəsi zamanı Şuşa-Xankəndi istiqamətində döyüşlərdə savaşıb. 8 noyabr 2020-ci ildə Şuşa-Xankəndi istiqamətində döyüşlər zamanı şəhid olub. Oğuz rayonunun Baş Daşağıl kəndində dəfn olunub.\n\nPrezident İlham Əliyevin 15.12.2020-ci il tarixli Sərəncamına əsasən ölümündən sonra \"Vətən uğrunda\" medalı, 18.12.2020-ci il tarixli Sərəncamına əsasən \"Cəsur döyüşçü\" medalı, 29.12.2020-ci il tarixli Sərəncamına əsasən isə \"Şuşanın azad olunmasına görə\" medalı ilə təltif edilib."
+  },
+  {
+    id:"ibrahimli-nail", ad:"Nail İbrahimli", ata:"Nəriman oğlu",
+    doğum:"4 mart 1994", şəhadət:"7 noyabr 2020", kənd:"Xaçmaz",
+    rütbə:"Kiçik gizir (DSX)",
+    medallar:["Vətən Müharibəsi Qəhrəmanı","Vətən uğrunda","Şuşanın azad olunmasına görə"],
+    döyüşYerləri:["Murovdağ","Füzuli","Qubadlı","Zəngilan","Cəbrayıl","Xudafərin","Laçın","Şuşa"],
+    bio:"Nail Nəriman oğlu İbrahimli 4 mart 1994-cü ildə Oğuz rayonunun Xaçmaz kəndində Nəriman İbrahimovun və Aqibət İbrahimovanın ailəsində anadan olub. Onun ailədə Faiq adlı qardaşı olub. 2001-2011-ci illərdə V. İbrahimov adına 2 nömrəli tam orta məktəbdə təhsil alıb. Uşaq yaşlarından güləşlə məşğul olub, bir sıra turnirlərdə məktəbi təmsil edib. Subay idi.\n\n2012-ci il aprelin 2-də Oğuz Rayon Hərbi Komissarlığı tərəfindən hərbi xidmətə çağırılıb. 2012-2013-cü illərdə Azərbaycanın Fövqəladə Hallar Nazirliyinin sıralarında müddətli həqiqi hərbi xidmətdə olub, xidmətini Quba rayonunda yerləşən N saylı hərbi hissədə edib. 2019-cu il oktyabrın 23-də sənədlərini Dövlət Sərhəd Xidmətinin Sərhəd Qoşunlarına təqdim edib. 3 ay Xudat şəhərində yerləşən N saylı hərbi hissədə kurs keçdikdən sonra xüsusi təyinatlı dəstənin \"kiçik giziri\" kimi hərbi vəzifəsinə davam edib. Daha sonra öz istəyi ilə Qazax rayonunda yerləşən N saylı hərbi hissədə xidmət edib. Kəşfiyyat qrupuna daxil edilib, təlimlərdə fərqləndiyinə görə xüsusi təyinatlılar bölüyünə daxil olub.\n\nVətən müharibəsinin ilk günlərindən Murovdağ istiqamətində gedən döyüşlərdə iştirak edib. Murov zirvəsinin işğaldan azad edilməsindən sonra Füzuli, Qubadlı və Zəngilan istiqamətlərində aparılan əməliyyatlarda iştirak edib. Zəngilan şəhərinin, Xudafərin körpülərinin, Qubadlı şəhərinin azad edilməsində, Laçın dəhlizi istiqamətində əməliyyatlarda böyük rolu olub. Pulemyotçu kimi dəstədə çətin və vacib vəzifələri yerinə yetirib, \"Hücum\" və \"PK\" pulemyotlarından istifadə edib. \"Nöqtə\" əməliyyatında üstünlüyü əldə edən dəstə ilə 7 noyabr 2020-ci ildə Şuşa şəhərinin mərkəzində tapşırığı yerinə yetirərkən şəhid olub. Şəhid olması növbəti günlərdə təsdiqlənib və 12 noyabr 2020-ci ildə Oğuz rayonunun Xaçmaz kəndində yerləşən Şəhidlər Xiyabanında dəfn edilib.\n\nPrezident İlham Əliyevin 09.12.2020-ci il tarixli Sərəncamına əsasən ölümündən sonra \"Vətən Müharibəsi Qəhrəmanı\" adına layiq görülüb. 15.12.2020-ci il tarixli Sərəncamına əsasən \"Vətən uğrunda\" medalı, 29.12.2020-ci il tarixli Sərəncamına əsasən isə \"Şuşanın azad olunmasına görə\" medalı ilə təltif edilib. 2021-ci ildə İctimai Televiziyanın \"Heç kim unudulmur, heç nə yaddan çıxmır\" verilişinin növbəti seriyası ona həsr olunub. Oğuz şəhəri 3 saylı məktəb-liseyə Nail İbrahimlinin adı verilib."
+  },
+  {
+    id:"rehimli-orxan", ad:"Orxan Rəhimli", ata:"Rəşid oğlu",
+    doğum:"28 aprel 1994", şəhadət:"8 noyabr 2020", kənd:"Xaçmaz",
+    rütbə:"Əsgər",
+    medallar:["Vətən uğrunda","Cəsur döyüşçü","Şuşanın azad olunmasına görə"],
+    döyüşYerləri:["Cəbrayıl","Füzuli","Şuşa","Xankəndi"],
+    bio:"Orxan Rəşid oğlu Rəhimli 28 aprel 1994-cü ildə Oğuz rayonunun Xaçmaz kəndində anadan olub. 2000-2011-ci illərdə M. F. Axundov adına Xaçmaz kənd 1 nömrəli tam orta məktəbində təhsil alıb. 2011-2015-ci illərdə Azərbaycan Dövlət Neft və Sənaye Universitetində (ADNSU) \"Dağ mədən mühəndisliyi\" üzrə ali təhsil alıb. Subay idi.\n\n2016-2017-ci illərdə Azərbaycan Silahlı Qüvvələrinin sıralarında müddətli həqiqi hərbi xidmətdə olub.\n\nVətən müharibəsi zamanı Cəbrayılın, Füzulinin və Şuşa uğrunda gedən döyüşlərdə savaşıb. Döyüşlər zamanı bir neçə dəfə yaralansa da, döyüşməyə davam edib. 8 noyabr 2020-ci ildə Şuşa-Xankəndi istiqamətində şəhid olub. 16 noyabr 2020-ci ildə Oğuz rayonunun Xaçmaz kənd Şəhidlər Xiyabanında dəfn olunub.\n\nPrezident İlham Əliyevin 15.12.2020-ci il tarixli Sərəncamına əsasən ölümündən sonra \"Vətən uğrunda\" medalı, 18.12.2020-ci il tarixli Sərəncamına əsasən \"Cəsur döyüşçü\" medalı, 29.12.2020-ci il tarixli Sərəncamına əsasən isə \"Şuşanın azad olunmasına görə\" medalı ilə təltif edilib."
+  },
+  {
+    id:"zemeddinov-ferid", ad:"Fərid Zaməddinov", ata:"İmran oğlu",
+    doğum:"11 may 1986", şəhadət:"10 noyabr 2020", kənd:"Oğuz şəhəri",
+    rütbə:"Gizir",
+    medallar:["Vətən uğrunda"],
+    döyüşYerləri:["Murovdağ","Talış"],
+    bio:"Fərid İmran oğlu Zaməddinov 11 may 1986-cı ildə Oğuz şəhərində İmran və Nərgiz Zaməddinovların ailəsində anadan olub. 1992-2003-cü illərdə Oğuz şəhəri E.Abdullayev adına 2 nömrəli tam orta məktəbdə təhsil alıb. Ailəli idi. Nəzrin və Nərmin adında 2 qızı, Aqşin adında isə 1 oğlu yadigar qaldı.\n\n2003-2005-ci illərdə Azərbaycan Silahlı Qüvvələrinin sıralarında müddətli həqiqi hərbi xidmətdə olub. 2012-ci ildən müddətdən artıq həqiqi hərbi xidmət qulluqçusu idi. 2016-cı ilin 2-5 aprelində baş verən Aprel döyüşlərində savaşıb. Düşmənin 30-a yaxın tankını təkbaşına məhv edib, \"Tankyeyən\" kimi tanınıb.\n\nVətən müharibəsi zamanı Murovdağ döyüşlərində, həmçinin Talış qəsəbəsinin azadlığı uğrunda gedən döyüşlərdə savaşıb. 10 noyabr 2020-ci ildə Talış istiqamətində snayper gülləsi nəticəsində şəhid olub. Oğuz Şəhidlər Xiyabanında dəfn olunub. Şəhidlər Zaməddinov Fərid və Əhmədli Elşənin xatirəsinə Oğuz rayonunda bulaq inşa olunub.\n\nPrezident İlham Əliyevin 15.12.2020-ci il tarixli Sərəncamına əsasən ölümündən sonra \"Vətən uğrunda\" medalı ilə təltif edilib."
+  },
+  {
+    id:"ehmedli-elsen", ad:"Elşən Əhmədli", ata:"Elbrus oğlu",
+    doğum:"11 iyul 1997", şəhadət:"7 noyabr 2020", kənd:"Oğuz şəhəri",
+    rütbə:"Snayperçi (XTQ)",
+    medallar:["Vətən uğrunda","Cəsur döyüşçü","Şuşanın azad olunmasına görə"],
+    döyüşYerləri:["Füzuli","Şuşa"],
+    bio:"Elşən Elbrus oğlu Əhmədli 11 iyul 1997-ci ildə Oğuz rayonunda anadan olub. 2003-cü ildə E.Abdullayev adına Oğuz şəhər 2 nömrəli tam orta məktəbə daxil olub. 2008-ci ildə təhsilini Oğuz şəhər 3 nömrəli məktəb-liseydə davam etdirərək, 2014-cü ildə məktəbi bitirib. 2014-2018-ci illərdə Azərbaycan Texniki Universitetində Nəqliyyat və Logistika fakültəsi üzrə Bakalavr təhsili alıb. Gülərüz, səmimi, mehriban xüsusiyyətlərinə görə müəllim kollektivi və şagird yoldaşları tərəfindən hər zaman hörmət və rəğbətlə qarşılanırdı. Subay idi.\n\n2019-cu ildə Cəlilabad rayonunun Xüsusi Təyinatlı Qüvvələrinə müddətli həqiqi hərbi xidmətə çağırılıb, 2020-ci ildə xidmətini uğurla başa vurub.\n\nVətən müharibəsi zamanı Füzuli döyüşlərində və Şuşa uğrunda gedən döyüşlərdə savaşıb. 7 noyabr 2020-ci ildə Şuşa uğrunda gedən döyüşlərdə qəhrəmancasına vuruşaraq şəhidlik zirvəsinə yüksəlib. 17 noyabr 2020-ci ildə Oğuz Şəhidlər Xiyabanında dəfn olunub.\n\nPrezident İlham Əliyevin 15.12.2020-ci il tarixli Sərəncamına əsasən ölümündən sonra \"Vətən uğrunda\" medalı, 18.12.2020-ci il tarixli Sərəncamına əsasən \"Cəsur döyüşçü\" medalı, 29.12.2020-ci il tarixli Sərəncamına əsasən isə \"Şuşanın azad olunmasına görə\" medalı ilə təltif edilib."
+  },
+  {
+    id:"cumuzade-tebriz", ad:"Təbriz Cumuzadə", ata:"İldırım oğlu",
+    doğum:"26 fevral 2000", şəhadət:"9 noyabr 2020", kənd:"Xaçmaz",
+    rütbə:"Əsgər",
+    medallar:["Vətən uğrunda","Cəsur döyüşçü","Şuşanın azad olunmasına görə"],
+    döyüşYerləri:["Cəbrayıl","Füzuli","Xocavənd","Şuşa","Xankəndi"],
+    bio:"Təbriz İldırım oğlu Cumuzadə 26 fevral 2000-ci ildə Oğuz rayonunun Xaçmaz kəndində anadan olub. 2006-2017-ci illərdə Mingəçevir şəhərində İ. Zeynalov adına 2 nömrəli tam orta məktəbdə təhsil alıb. Subay idi.\n\n2018-2019-cu illərdə Azərbaycan Silahlı Qüvvələrinin sıralarında müddətli həqiqi hərbi xidmətdə olub.\n\nVətən müharibəsi zamanı Cəbrayılın, Füzulinin, Xocavəndin və Şuşanın azadlığı uğrunda gedən döyüşlərdə savaşıb. 8-9 noyabr 2020-ci il tarixləri arasında Şuşa-Xankəndi istiqamətində gedən döyüşlər zamanı düşmənin snayperdən atəş açması nəticəsində şəhid olub. Nəşi 17 gün sonra tapılıb və Mingəçevir şəhərinin Şəhidlər Xiyabanında dəfn olunub.\n\nPrezident İlham Əliyevin 15.12.2020-ci il tarixli Sərəncamına əsasən ölümündən sonra \"Vətən uğrunda\" medalı, 18.12.2020-ci il tarixli Sərəncamına əsasən \"Cəsur döyüşçü\" medalı, 29.12.2020-ci il tarixli Sərəncamına əsasən isə \"Şuşanın azad olunmasına görə\" medalı ilə təltif edilib."
+  },
+  {
+    id:"atakisili-kamil", ad:"Kamil Atakişili", ata:"Araz oğlu",
+    doğum:"12 iyun 2000", şəhadət:"5 noyabr 2020", kənd:"Xaçmaz",
+    rütbə:"Müddətli həqiqi hərbi xidmət qulluqçusu",
+    medallar:["Vətən uğrunda","Cəbrayılın azad olunmasına görə","Qubadlının azad olunmasına görə","Laçının azad olunmasına görə","Hərbi xidmətlərə görə"],
+    döyüşYerləri:["Füzuli","Cəbrayıl","Qubadlı","Zəngilan","Laçın"],
+    bio:"Kamil Araz oğlu Atakişili 12 iyun 2000-ci ildə Oğuz rayonunun Xaçmaz kəndində anadan olub. 2006-2017-ci illərdə şəhid Vüqar İbrahimov adına Xaçmaz kənd 2 nömrəli tam orta məktəbdə təhsil alıb.\n\n2018-2020-ci illərdə Azərbaycan Silahlı Qüvvələrində müddətli həqiqi hərbi xidmət keçib.\n\nVətən müharibəsi zamanı Füzulinin, Cəbrayılın, Qubadlının və Zəngilanın azadlığı uğrunda gedən döyüşlərdə savaşıb. Cəbrayılda bir dəfə ayağından yaralanıb, bir neçə gün xəstəxanada yatdıqdan sonra yenidən özü israrla döyüşlərə qatılıb. 5 noyabr 2020-ci ildə Laçın dəhlizində qəhrəmancasına vuruşaraq şəhid olub. 27 noyabr 2020-ci ildə Oğuz rayonunun Xaçmaz kənd Şəhidlər Xiyabanında dəfn olunub.\n\nPrezident İlham Əliyevin Sərəncamları ilə ölümündən sonra \"Vətən uğrunda\", \"Cəbrayılın azad olunmasına görə\", \"Qubadlının azad olunmasına görə\", \"Laçının azad olunmasına görə\" və \"Hərbi xidmətlərə görə\" medalları ilə təltif edilib."
+  },
+  {
+    id:"keremov-zamaddin", ad:"Zaməddin Kərəmov", ata:"Bahadur oğlu",
+    doğum:"24 yanvar 2001", şəhadət:"2020", kənd:"Bucaq",
+    rütbə:"Müddətdən artıq hərbi qulluqçu",
+    medallar:["Vətən uğrunda"],
+    döyüşYerləri:["Suqovuşan","Murovdağ","Kəlbəcər","Canavar qulağı"],
+    bio:"Zaməddin Bahadur oğlu Kərəmov 24 yanvar 2001-ci ildə Oğuz rayonunun Bucaq kəndində anadan olub. 2007-2018-ci illərdə Bucaq kənd orta məktəbində təhsil alıb.\n\n2019-cu ilin 24 yanvarında hərbi xidmətə başlayıb. 2020-ci ildə hərbi xidmətini başa vurduqdan sonra yenidən müddətdən artıq hərbi qulluqçu kimi ordu sıralarına qoşulub. İkinci Qarabağ müharibəsinə Şəmkir korpusunun \"Həmlə 319\" batalyonunun tərkibində qatılıb. Suqovuşan kəndinin alınmasında iştirak edib. Kəlbəcər istiqamətində Murovdağ silsiləsində \"Canavar qulağı\" postunun alınması uğrunda gedən döyüşlərdə ürəyindən aldığı qəlpə yarası nəticəsində şəhid olub. Müharibə bitəndən sonra axtarışlar nəticəsində nəşi tapılıb və 16 dekabr 2020-ci ildə doğulduğu Bucaq kəndində dəfn olunub.\n\nPrezident İlham Əliyevin 24.06.2021-ci il tarixli Sərəncamına əsasən ölümündən sonra \"Vətən uğrunda\" medalı ilə təltif edilib."
+  },
+  {
+    id:"letifov-revan", ad:"Rəvan Lətifov", ata:"Ömür oğlu",
+    doğum:"26 avqust 1991", şəhadət:"6 noyabr 2020", kənd:"Xaçmaz",
+    rütbə:"Əsgər (Tank əleyhinə batareya)",
+    medallar:["Vətən uğrunda","Cəsur döyüşçü","Şuşanın azad olunmasına görə"],
+    döyüşYerləri:["Füzuli","İkinci Mahmudlu","Şuşa","Daşaltı"],
+    bio:"Rəvan Ömür oğlu Lətifov 26 avqust 1991-ci ildə Oğuz rayonunun Xaçmaz kəndində anadan olub. 2008-ci ildə Xaçmaz kəndində V.İbrahimov adına tam orta məktəbi bitirdikdən sonra Azərbaycan Dövlət Pedaqoji Universitetinin Təhsilin təşkili və idarə olunması ixtisasına daxil olub. Təhsilini müvəffəqiyyətlə başa vurduqdan sonra 2012-ci ildə Naxçıvan Muxtar Respublikasının Şərur rayonunun N saylı hərbi hissəsində Tank əleyhinə batareyada hərbi xidmət keçib. Hərbi xidməti başa vurduqdan sonra bir müddət Ə.Abdulhüseynov adına Sincan kənd tam orta məktəbində məktəbdənkənar və sinifdənxaric tərbiyə işi üzrə təşkilatçı vəzifəsində işləyib. Daha sonra Oğuz rayonu Sincan kənd tam orta məktəbində təşkilatçı müavin vəzifəsində çalışıb.\n\n29 sentyabr 2020-ci ildə Milli Ordu sıralarına qoşulub. Bir ay ərzində Gəncə şəhərinin N saylı hərbi hissəsində təşkil edilən intensiv hərbi təlimlərdə iştirak etdikdən sonra Qarabağ uğrunda gedən aktiv hərbi əməliyyatlara qatılıb. 29 oktyabr 2020-ci il tarixində Tank əleyhinə batareyanın əsgəri vəzifəsində Füzuli rayonunun İkinci Mahmudlu kəndinin düşmən işğalından azad edilməsində iştirak edib. 6 noyabr 2020-ci ildə Şuşa şəhərinin işğaldan azad olunması əməliyyatında fəal iştirak edərək döyüş tapşırıqlarını uğurla yerinə yetirib, düşmənin əsas qruplaşmalarını və texnikasını məhv etməklə qoşunlarımızın döyüş qabiliyyətinin qorunub saxlanılmasında fərqlənib.\n\n6 noyabr 2020-ci il tarixində iştirak etdiyi batareya Daşaltı-Şuşa istiqamətində hücuma keçib. Bu onun son döyüşü idi. Bu istiqamətdə gedən qanlı döyüşlərdə Rəvan Lətifov qəhrəmancasına şəhid olub. 16 noyabr 2020-ci ildə Xaçmaz kənd Şəhidlər Xiyabanında dəfn edilib.\n\nPrezident İlham Əliyevin Sərəncamları ilə ölümündən sonra \"Vətən uğrunda\", \"Cəsur döyüşçü\" və \"Şuşanın azad olunmasına görə\" medalları ilə təltif edilib."
+  },
+  {
+    id:"beydiyev-royal", ad:"Röyal Beydiyev", ata:"Nəsib oğlu",
+    doğum:"18 fevral 2005", şəhadət:"20 sentyabr 2023", kənd:"Qarabulaq",
+    rütbə:"Əsgər",
+    medallar:["Vətən uğrunda"],
+    döyüşYerləri:["Xankəndi"],
+    ailə:["Atası: Beydiyev Nəsib Nofəl oğlu","Anası: İbrahimova Saxavət Bakir qızı","Bacı: Beydiyevə Emiliya Nəsib qızı","Bacı: Beydiyevə Xatun Nəsib qızı"],
+    haqqında:"Mərd, cəsur, qorxmaz insan olub.",
+    bio:"Beydiyev Röyal Nəsib oğlu 18 fevral 2005-ci ildə Oğuz rayonunun Qarabulaq kəndində anadan olub. Oğuz rayonu Əjdər Mahmudov adına Qarabulaq kənd tam orta məktəbini bitirdikdən sonra Azərbaycan Silahlı Qüvvələrinin sıralarında hərbi xidmətə çağırılıb.\n\nAzərbaycan Silahlı Qüvvələrinin əsgəri olan Beydiyev Röyal Nəsib oğlu Azərbaycan Respublikasının Silahlı Qüvvələri tərəfindən 20 sentyabr 2023-cü il tarixində həyata keçirilmiş uğurlu lokal antiterror tədbirləri zamanı şəhid olub. Oğuz rayonunun Qarabulaq kənd qəbiristanlığında dəfn edilib."
+  },
+  {
+    id:"agayev-kenan", ad:"Kənan Ağayev", ata:"Vahid oğlu",
+    doğum:"9 sentyabr 2002", şəhadət:"19 sentyabr 2023", kənd:"Xalxal",
+    rütbə:"MAHHXHQ",
+    medallar:["Vətən uğrunda","Hərbi xidmətlərə görə","Cəsur döyüşçü"],
+    döyüşYerləri:["Xocalı"],
+    ailə:["Atası: Ağayev Vahid Qasım oğlu","Anası: Ağayeva Rəminə Rəşid qızı","Qardaşı: Ağayev Nurlan Vahid oğlu","Bacısı: Ağayeva Mətanət Vahid qızı","Qardaşı: Ağayev Tural Vahid oğlu"],
+    haqqında:"Kənanın lap uşaqlığından hərb sənətinə marağı var idi. Elə uşaqlıqdan \"mən böyüyəndə hərbçi olub, torpaqlarımızı qoruyacağam\" deyirdi. Kənanı tanıyan hər kəs deyirdi ki, Kənan hərbçi olmaq üçün doğulmuşdu elə bil.",
+    bio:"Ağayev Kənan Vahid oğlu 9 sentyabr 2002-ci ildə Oğuz rayonu, Xalxal kəndində anadan olub. Oğuz rayonu İntizam Rəhimov adına Qumlaq kənd orta məktəbində orta təhsil alıb. Orta təhsilini tamamladıqdan sonra Azərbaycan Silahlı Qüvvələrinin sıralarına xidmətə çağırılıb.\n\nAzərbaycan Silahlı Qüvvələrinin əsgəri olan Ağayev Kənan Vahid oğlu Azərbaycan Respublikasının Silahlı Qüvvələri tərəfindən 19-20 sentyabr 2023-cü il tarixində həyata keçirilmiş uğurlu lokal antiterror tədbirləri zamanı Xocalı rayonunda şəhid olub. Oğuz rayonunun Ərmənət kəndində dəfn edilib."
+  }
+];
+
+/* ==================== KARTLARI YARAT ==================== */
+const kartlarDiv = document.getElementById('kartlar');
+
+function kartYarat(s, i){
+  const ilkHərf = s.ad.charAt(0);
+  const kart = document.createElement('div');
+  kart.className = 'kart';
+  kart.style.transitionDelay = (i * 0.03) + 's';
+
+  kart.innerHTML = `
+    <div class="kart-foto">
+      <div class="placeholder">${ilkHərf}</div>
+      <img src="${s.id}.jpg" alt="${s.ad}" loading="lazy"
+           onload="this.previousElementSibling.style.display='none'"
+           onerror="this.remove()">
+    </div>
+    <div class="kart-info">
+      <h3>${s.ad}</h3>
+      <div class="tarix">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2"/>
+          <path d="M16 2v4M8 2v4M3 10h18"/>
+        </svg>
+        ${s.doğum} – ${s.şəhadət}
+      </div>
+      <div class="kart-taglar">
+        <span class="tag">${s.kənd}</span>
+        <span class="tag tund">Vətən müharibəsi</span>
+      </div>
+    </div>
+  `;
+  kart.addEventListener('click',()=>sehifeAc(s.id));
+  return kart;
+}
+
+ŞƏHİDLƏR.forEach((s,i)=>kartlarDiv.appendChild(kartYarat(s,i)));
+
+/* ==================== ŞƏHİD SƏHİFƏSİ ==================== */
+function sehifeAc(id){
+  const s = ŞƏHİDLƏR.find(x=>x.id===id);
+  if(!s) return;
+
+  document.getElementById('sehifeKənd').textContent = s.kənd + ' · Vətən müharibəsi';
+
+  const qalereyaHTML = [1,2,3,4].map(n => `
+    <div class="qalereya-item" onclick="lightboxAc('${s.id}-${n}.jpg','${s.ad}')">
+      <div class="placeholder">📷</div>
+      <img src="${s.id}-${n}.jpg" alt="${s.ad} - ${n}" loading="lazy"
+           onload="this.previousElementSibling.style.display='none'"
+           onerror="this.remove()">
+    </div>
+  `).join('');
+
+  const bioHTML = s.bio.split('\n\n').map(p => `<p>${p}</p>`).join('');
+
+  const ailəHTML = s.ailə && s.ailə.length
+    ? `<ul class="ailə-siyahı">${s.ailə.map(x=>`<li>${x}</li>`).join('')}</ul>`
+    : '';
+
+  const haqqındaHTML = s.haqqında
+    ? `<div class="sehid-bölmə"><h2>Haqqında deyilənlər</h2><p style="font-style:italic;color:var(--metn);">"${s.haqqında}"</p></div>`
+    : '';
+
+  const body = document.getElementById('sehidBody');
+  body.innerHTML = `
+    <div class="sehid-hero">
+      <div class="sehid-foto">
+        <div class="placeholder">${s.ad.charAt(0)}</div>
+        <img src="${s.id}.jpg" alt="${s.ad}"
+             onload="this.previousElementSibling.style.display='none'"
+             onerror="this.remove()">
+      </div>
+      <div class="sehid-basliq">
+        <h1>${s.ad}</h1>
+        <div class="tam-ad">${s.ad} ${s.ata}</div>
+        <div class="sehid-melumat-grid">
+          <div class="sehid-melumat-item">
+            <div class="etiket">Doğum tarixi</div>
+            <div class="dəyər">${s.doğum}</div>
+          </div>
+          <div class="sehid-melumat-item">
+            <div class="etiket">Şəhadət tarixi</div>
+            <div class="dəyər">${s.şəhadət}</div>
+          </div>
+          <div class="sehid-melumat-item">
+            <div class="etiket">Doğum yeri</div>
+            <div class="dəyər">${s.kənd}</div>
+          </div>
+          <div class="sehid-melumat-item">
+            <div class="etiket">Rütbə</div>
+            <div class="dəyər">${s.rütbə}</div>
+          </div>
+        </div>
+        ${s.medallar.length ? `
+        <div class="sehid-medallar">
+          ${s.medallar.map(m=>`<span class="medal">${m}</span>`).join('')}
+        </div>` : ''}
+      </div>
+    </div>
+
+    <div class="sehid-bölmə">
+      <h2>Həyat yolu</h2>
+      ${bioHTML}
+    </div>
+
+    ${ailəHTML ? `<div class="sehid-bölmə"><h2>Ailə tərkibi</h2>${ailəHTML}</div>` : ''}
+
+    ${haqqındaHTML}
+
+    ${s.döyüşYerləri.length ? `
+    <div class="sehid-bölmə">
+      <h2>Döyüş yerləri</h2>
+      <div class="döyüş-yerləri">
+        ${s.döyüşYerləri.map(y=>`<span class="döyüş-yeri">${y}</span>`).join('')}
+      </div>
+    </div>` : ''}
+
+    <div class="sehid-bölmə">
+      <h2>Qalereya</h2>
+      <div class="qalereya">
+        ${qalereyaHTML}
+      </div>
+    </div>
+
+    <div class="sehid-bölmə">
+      <h2>Xatirə</h2>
+      <p>${s.ad} ${s.ata} — adı əbədi yaşayacaq. Onun xatirəsi qəlbimizdə daim uca tutulacaq.</p>
+    </div>
+  `;
+
+  const el = document.getElementById('sehidSehife');
+  el.classList.add('aktiv');
+  document.body.style.overflow = 'hidden';
+  el.scrollTop = 0;
+}
+
+function sehifeBağla(){
+  document.getElementById('sehidSehife').classList.remove('aktiv');
+  document.body.style.overflow = '';
+  document.getElementById('sehidBody').innerHTML = '';
+}
+
+/* ==================== LIGHTBOX ==================== */
+let cariQalereya = [];
+let cariIndex = 0;
+let cariAd = '';
+
+function lightboxAc(şəkil, ad){
+  cariAd = ad;
+  const s = ŞƏHİDLƏR.find(x => şəkil.startsWith(x.id + '-'));
+  if(s){
+    cariQalereya = [1,2,3,4].map(n => `${s.id}-${n}.jpg`);
+  } else {
+    cariQalereya = [şəkil];
+  }
+  cariIndex = cariQalereya.indexOf(şəkil);
+  if(cariIndex === -1) cariIndex = 0;
+  şəkilGöstər();
+  document.getElementById('lightbox').classList.add('aktiv');
+  document.body.style.overflow = 'hidden';
+}
+
+function şəkilGöstər(){
+  document.getElementById('lightboxImg').src = cariQalereya[cariIndex];
+  document.getElementById('lightboxAlt').textContent =
+    cariAd + ' · ' + (cariIndex + 1) + ' / ' + cariQalereya.length;
+}
+
+function lightboxBağla(){
+  document.getElementById('lightbox').classList.remove('aktiv');
+  document.getElementById('lightboxImg').src = '';
+  if(!document.getElementById('sehidSehife').classList.contains('aktiv')){
+    document.body.style.overflow = '';
+  }
+}
+
+function lightboxDəyiş(istiqamət){
+  if(cariQalereya.length < 2) return;
+  cariIndex = (cariIndex + istiqamət + cariQalereya.length) % cariQalereya.length;
+  const img = document.getElementById('lightboxImg');
+  img.style.opacity = '0';
+  setTimeout(() => {
+    img.src = cariQalereya[cariIndex];
+    img.style.opacity = '1';
+    document.getElementById('lightboxAlt').textContent =
+      cariAd + ' · ' + (cariIndex + 1) + ' / ' + cariQalereya.length;
+  }, 180);
+}
+
+document.addEventListener('keydown', e => {
+  const lb = document.getElementById('lightbox');
+  if(!lb.classList.contains('aktiv')) return;
+  if(e.key === 'Escape') lightboxBağla();
+  if(e.key === 'ArrowLeft') lightboxDəyiş(-1);
+  if(e.key === 'ArrowRight') lightboxDəyiş(1);
+});
+
+document.getElementById('lightbox').addEventListener('click', e => {
+  if(e.target.id === 'lightbox') lightboxBağla();
+});
+
+/* ==================== STAT ANİMASİYASI ==================== */
+let statBaşladı=false;
+function statAnimasiya(){
+  if(statBaşladı) return;
+  statBaşladı=true;
+  document.querySelectorAll('.rəqəm').forEach(el=>{
+    const hədəf=+el.dataset.say;
+    const müddət=1800;
+    const başlanğıc=performance.now();
+    function addım(indi){
+      const keçən=Math.min((indi-başlanğıc)/müddət,1);
+      const easing=1-Math.pow(1-keçən,3);
+      el.textContent=Math.floor(easing*hədəf);
+      if(keçən<1) requestAnimationFrame(addım);
+      else el.textContent=hədəf;
+    }
+    requestAnimationFrame(addım);
+  });
+}
+
+/* ==================== REVEAL ==================== */
+const revealObserver=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('görünən');
+      revealObserver.unobserve(e.target);
+    }
+  });
+},{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
+
+document.querySelectorAll('.reveal,.kart,.mesaj').forEach(el=>revealObserver.observe(el));
+
+/* ==================== SCROLL ==================== */
+const progress=document.getElementById('progress');
+const header=document.getElementById('header');
+let sonScroll=0;
+
+window.addEventListener('scroll',()=>{
+  const st=window.scrollY;
+  const h=document.documentElement.scrollHeight-window.innerHeight;
+  progress.style.width=(st/h*100)+'%';
+
+  if(st>40) header.classList.add('aktiv');
+  else header.classList.remove('aktiv');
+
+  if(st>300){
+    if(st>sonScroll) header.classList.add('gizlət');
+    else header.classList.remove('gizlət');
+  } else header.classList.remove('gizlət');
+
+  sonScroll=st;
+},{passive:true});
+
+/* ==================== MENU ==================== */
+function menuToggle(){
+  document.getElementById('menu').classList.toggle('aktiv');
+  document.getElementById('mobilBtn').classList.toggle('aktiv');
+  document.getElementById('overlay').classList.toggle('aktiv');
+  document.body.style.overflow=document.getElementById('menu').classList.contains('aktiv')?'hidden':'';
+}
+document.querySelectorAll('#menu a').forEach(a=>{
+  a.addEventListener('click',()=>{
+    if(document.getElementById('menu').classList.contains('aktiv')) menuToggle();
+  });
+});
+
+/* ==================== ESC ==================== */
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    if(document.getElementById('sehidSehife').classList.contains('aktiv') && !document.getElementById('lightbox').classList.contains('aktiv')) sehifeBağla();
+  }
+});
+
+/* ==================== SMOOTH SCROLL ==================== */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',function(e){
+    const h=document.querySelector(this.getAttribute('href'));
+    if(h){
+      e.preventDefault();
+      const top=h.getBoundingClientRect().top+window.scrollY-80;
+      window.scrollTo({top,behavior:'smooth'});
+    }
+  });
+});
+
+/* ==================== PARALLAX ==================== */
+if(window.matchMedia('(min-width:768px)').matches){
+  document.addEventListener('mousemove',e=>{
+    const x=(e.clientX/window.innerWidth-0.5)*2;
+    const y=(e.clientY/window.innerHeight-0.5)*2;
+    document.querySelectorAll('.bg-parıltı').forEach((el,i)=>{
+      const s=(i+1)*10;
+      el.style.transform=`translate(${x*s}px,${y*s}px)`;
+    });
+  });
+}
+</script>
+
+</body>
+</html>
